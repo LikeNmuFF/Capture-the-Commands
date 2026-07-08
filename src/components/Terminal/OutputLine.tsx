@@ -9,16 +9,16 @@ export default function OutputLine({ line }: Props) {
 
   if (line.type === 'input') {
     return (
-      <div className={`${baseClass} text-crt-green`}>
-        <span className="text-white/60">user@bash-bootcamp:~$ </span>
-        {line.text}
+      <div className={`${baseClass}`}>
+        <span style={{ color: 'var(--text-secondary)' }}>user@bash-bootcamp:~$ </span>
+        <span style={{ color: 'var(--text-accent)' }}>{line.text}</span>
       </div>
     )
   }
 
   if (line.type === 'error') {
     return (
-      <div className={`${baseClass} text-red-400`}>
+      <div className={`${baseClass}`} style={{ color: 'var(--error)' }}>
         {line.text}
       </div>
     )
@@ -26,14 +26,14 @@ export default function OutputLine({ line }: Props) {
 
   if (line.type === 'system') {
     return (
-      <div className={`${baseClass} text-blue-300/80 italic`}>
+      <div className={`${baseClass}`} style={{ color: 'var(--info)', fontStyle: 'italic' }}>
         {line.text}
       </div>
     )
   }
 
   return (
-    <div className={`${baseClass} text-gray-200`}>
+    <div className={`${baseClass}`} style={{ color: 'var(--text-primary)' }}>
       {line.text}
     </div>
   )

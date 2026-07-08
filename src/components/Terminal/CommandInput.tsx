@@ -17,10 +17,10 @@ export default function CommandInput({ value, onChange, onKeyDown, inputRef, dis
 
   return (
     <div className="flex items-center gap-0 font-mono terminal-text">
-      <span className="text-crt-green shrink-0 animate-pulse-glow">
+      <span className="shrink-0 animate-pulse-glow" style={{ color: 'var(--text-accent)' }}>
         user@bash-bootcamp:~$
       </span>
-      <span className="text-white/30 mx-1">$</span>
+      <span className="mx-1" style={{ color: 'var(--text-tertiary)' }}>$</span>
       <input
         ref={inputRef}
         type="text"
@@ -28,7 +28,11 @@ export default function CommandInput({ value, onChange, onKeyDown, inputRef, dis
         onChange={e => !disabled && onChange(e.target.value)}
         onKeyDown={onKeyDown}
         disabled={disabled}
-        className="flex-1 bg-transparent text-crt-green outline-none border-none caret-crt-green font-mono terminal-text min-w-0"
+        className="flex-1 bg-transparent outline-none border-none font-mono terminal-text min-w-0"
+        style={{
+          color: 'var(--text-accent)',
+          caretColor: 'var(--text-accent)'
+        }}
         spellCheck={false}
         autoComplete="off"
         autoFocus

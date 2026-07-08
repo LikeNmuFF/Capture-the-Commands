@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useGameStore } from '../../store/gameStore'
 import { getUnit } from '../../content'
+import { useTheme } from '../../contexts/ThemeContext'
 
 export default function QuizPanel() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -11,6 +12,7 @@ export default function QuizPanel() {
   const currentTierId = useGameStore(s => s.currentTierId)
   const currentUnitIndex = useGameStore(s => s.currentUnitIndex)
   const completeQuiz = useGameStore(s => s.completeQuiz)
+  const { isDark } = useTheme()
 
   const unit = getUnit(currentTierId, currentUnitIndex)
   const questions = unit?.quiz || []
@@ -45,73 +47,101 @@ export default function QuizPanel() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-lg mx-4 bg-surface-light rounded-2xl border border-glass-border shadow-2xl shadow-black/40 overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm animate-fade-in"
+      style={{ backgroundColor: 'var(--overlay)' }}
+    >
+      <div
+        className="w-full max-w-lg mx-4 rounded-2xl shadow-2xl overflow-hidden animate-scale-in"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          border: '1px solid var(--border-primary)',
+          boxShadow: isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : '0 25px 50px -12px rgba(0, 0, 0, 0.15)'
+        }}
+      >
         {/* Header */}
-        <div className="p-5 pb-4 border-b border-glass-border/50">
+        <div className="p-5 pb-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/20 flex items-center justify-center text-xs">
-                ?
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{
+                  backgroundColor: isDark ? 'rgba(88,166,255,0.15)' : 'rgba(9,105,218,0.15)',
+                  border: '1px solid var(--border-primary)'
+                }}
+              >
+                <svg className="w-4 h-4" style={{ color: 'var(--info)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-              <h3 className="text-sm font-semibold text-white">Quick Quiz</h3>
+              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Quick Quiz</h3>
             </div>
-            <span className="text-[11px] text-white/30 font-mono">
+            <span className="text-[11px] font-mono" style={{ color: 'var(--text-tertiary)' }}>
               {currentQuestion + 1} / {questions.length}
             </span>
           </div>
-          <div className="w-full h-1 bg-white/8 rounded-full overflow-hidden">
+          <div className="w-full h-1 rounded-full overflow-hidden" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }}>
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                background: 'linear-gradient(90deg, var(--info), #60a5fa)'
+              }}
             />
           </div>
         </div>
 
         {/* Body */}
         <div className="p-5">
-          <p className="text-sm text-white/90 mb-4 leading-relaxed">{question.question}</p>
+          <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--text-primary)', opacity: 0.9 }}>{question.question}</p>
 
           <div className="space-y-2">
             {question.options.map((option, i) => {
-              let ring = 'border-white/10 hover:border-white/20 hover:bg-white/5'
-              let bg = 'bg-white/[0.03]'
-              let text = 'text-white/75'
+              let borderColor = 'var(--border-primary)'
+              let bgColor = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'
+              let textColor = 'var(--text-secondary)'
 
               if (submitted) {
                 if (i === question.correctIndex) {
-                  ring = 'border-green-500/40 bg-green-500/10'
-                  text = 'text-green-400'
+                  borderColor = 'var(--success)'
+                  bgColor = isDark ? 'rgba(40,200,64,0.1)' : 'rgba(26,127,55,0.1)'
+                  textColor = 'var(--success)'
                 } else if (i === selected && i !== question.correctIndex) {
-                  ring = 'border-red-500/30 bg-red-500/8'
-                  text = 'text-red-400/70'
+                  borderColor = 'var(--error)'
+                  bgColor = isDark ? 'rgba(255,95,87,0.08)' : 'rgba(209,36,47,0.08)'
+                  textColor = 'var(--error)'
                 } else {
-                  ring = 'border-white/5'
-                  bg = 'bg-transparent'
-                  text = 'text-white/25'
+                  borderColor = 'var(--border-subtle)'
+                  bgColor = 'transparent'
+                  textColor = 'var(--text-tertiary)'
                 }
               } else if (i === selected) {
-                ring = 'border-crt-green/40 bg-crt-green/8'
-                text = 'text-crt-green/90'
+                borderColor = 'var(--text-accent)'
+                bgColor = isDark ? 'rgba(0,255,65,0.08)' : 'rgba(0,119,34,0.08)'
+                textColor = 'var(--text-accent)'
               }
 
               return (
                 <button
                   key={i}
                   onClick={() => handleSelect(i)}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl border ${ring} ${bg} ${text} text-sm transition-all duration-150 flex items-center gap-3`}
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center gap-3"
+                  style={{
+                    borderColor,
+                    borderWidth: '1px',
+                    backgroundColor: bgColor,
+                    color: textColor
+                  }}
                 >
-                  <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-[11px] font-mono shrink-0 ${
-                    submitted
-                      ? i === question.correctIndex
-                        ? 'border-green-500/50 bg-green-500/20 text-green-400'
-                        : i === selected
-                          ? 'border-red-500/40 bg-red-500/15 text-red-400'
-                          : 'border-white/10 text-white/20'
-                      : i === selected
-                        ? 'border-crt-green/50 bg-crt-green/15 text-crt-green'
-                        : 'border-white/15 text-white/30'
-                  }`}>
+                  <span
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-mono shrink-0"
+                    style={{
+                      borderColor,
+                      borderWidth: '1px',
+                      backgroundColor: i === selected ? bgColor : 'transparent',
+                      color: textColor
+                    }}
+                  >
                     {submitted && i === question.correctIndex ? '✓' : submitted && i === selected ? '✗' : String.fromCharCode(65 + i)}
                   </span>
                   {option}
@@ -127,17 +157,28 @@ export default function QuizPanel() {
             <button
               onClick={handleSubmit}
               disabled={selected === undefined}
-              className="w-full py-2.5 rounded-xl bg-blue-500/15 border border-blue-500/25 text-blue-400 font-mono text-sm hover:bg-blue-500/25 hover:border-blue-500/40 active:bg-blue-500/30 transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-blue-500/15"
+              className="w-full py-2.5 rounded-xl font-mono text-sm transition-all duration-200 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: isDark ? 'rgba(88,166,255,0.15)' : 'rgba(9,105,218,0.15)',
+                borderColor: 'var(--info)',
+                borderWidth: '1px',
+                color: 'var(--info)'
+              }}
             >
               Submit Answer
             </button>
           ) : (
             <div className="space-y-3">
-              <div className={`text-xs font-mono flex items-center gap-2 px-3 py-2 rounded-lg ${
-                selected === question.correctIndex
-                  ? 'bg-green-500/8 text-green-400 border border-green-500/15'
-                  : 'bg-red-500/8 text-red-400/80 border border-red-500/15'
-              }`}>
+              <div
+                className="text-xs font-mono flex items-center gap-2 px-3 py-2 rounded-lg animate-fade-in"
+                style={{
+                  backgroundColor: selected === question.correctIndex
+                    ? (isDark ? 'rgba(40,200,64,0.08)' : 'rgba(26,127,55,0.08)')
+                    : (isDark ? 'rgba(255,95,87,0.08)' : 'rgba(209,36,47,0.08)'),
+                  color: selected === question.correctIndex ? 'var(--success)' : 'var(--error)',
+                  border: '1px solid var(--border-subtle)'
+                }}
+              >
                 <span>{selected === question.correctIndex ? '✓' : '✗'}</span>
                 {selected === question.correctIndex
                   ? 'Correct! Well done.'
@@ -146,7 +187,13 @@ export default function QuizPanel() {
               </div>
               <button
                 onClick={handleNext}
-                className="w-full py-2.5 rounded-xl bg-blue-500/15 border border-blue-500/25 text-blue-400 font-mono text-sm hover:bg-blue-500/25 hover:border-blue-500/40 active:bg-blue-500/30 transition-all duration-150"
+                className="w-full py-2.5 rounded-xl font-mono text-sm transition-all duration-200 active:scale-[0.98]"
+                style={{
+                  backgroundColor: isDark ? 'rgba(88,166,255,0.15)' : 'rgba(9,105,218,0.15)',
+                  borderColor: 'var(--info)',
+                  borderWidth: '1px',
+                  color: 'var(--info)'
+                }}
               >
                 {currentQuestion + 1 < questions.length ? 'Next Question →' : 'See Results'}
               </button>

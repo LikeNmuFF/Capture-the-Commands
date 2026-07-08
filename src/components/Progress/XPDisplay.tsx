@@ -5,8 +5,8 @@ export default function XPDisplay() {
 
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-xs text-white/40 font-mono">XP</span>
-      <span className="text-sm text-crt-green font-mono font-bold">{xp}</span>
+      <span className="text-xs font-mono" style={{ color: 'var(--text-tertiary)' }}>XP</span>
+      <span className="text-sm font-mono font-bold" style={{ color: 'var(--text-accent)' }}>{xp}</span>
     </div>
   )
 }

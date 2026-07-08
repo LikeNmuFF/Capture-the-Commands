@@ -7,6 +7,7 @@ import WelcomePage from './pages/WelcomePage'
 import BootcampPage from './pages/BootcampPage'
 import AuthModal from './components/Auth/AuthModal'
 import UsernameSetup from './components/Auth/UsernameSetup'
+import ThemeToggle from './components/common/ThemeToggle'
 
 type Screen = 'landing' | 'boot' | 'game'
 
@@ -120,11 +121,25 @@ function App() {
   }
 
   if (!authLoaded) {
-    return <div className="h-screen w-screen bg-[#0a0a0a]" />
+    return (
+      <div className="h-screen w-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-2 border-t-transparent rounded-full animate-spin-slow" style={{ borderColor: 'var(--text-accent)', borderTopColor: 'transparent' }} />
+          <p className="text-sm font-mono" style={{ color: 'var(--text-secondary)' }}>Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <>
+      {/* Theme toggle - visible on landing and boot screens */}
+      {screen !== 'game' && (
+        <div className="fixed top-4 right-4 z-50 animate-fade-in">
+          <ThemeToggle />
+        </div>
+      )}
+
       {screen === 'landing' && (
         <LandingPage
           onStart={handleGuestStart}

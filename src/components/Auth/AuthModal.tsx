@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { loginWithGoogle } from '../../firebase/auth'
+import { useTheme } from '../../contexts/ThemeContext'
 
 interface Props {
   onLogin: (uid: string, displayName: string, photoURL: string, email: string, isNew: boolean) => void
@@ -9,6 +10,7 @@ interface Props {
 export default function AuthModal({ onLogin, onClose }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const { isDark } = useTheme()
 
   const handleGoogle = async () => {
     setLoading(true)
@@ -29,18 +31,35 @@ export default function AuthModal({ onLogin, onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="bg-surface-light rounded-2xl border border-glass-border p-8 shadow-2xl max-w-sm w-full mx-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--overlay)' }}>
+      <div
+        className="rounded-2xl p-8 shadow-2xl max-w-sm w-full mx-4 animate-scale-in"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderColor: 'var(--border-primary)',
+          borderWidth: '1px'
+        }}
+      >
         <div className="text-center mb-6">
-          <div className="text-3xl mb-2">🐚</div>
-          <h2 className="text-lg font-semibold text-white">Welcome to Bash Bootcamp</h2>
-          <p className="text-sm text-white/40 mt-1">Sign in to save your progress</p>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(0,255,65,0.1)' : 'rgba(0,119,34,0.1)' }}>
+            <svg className="w-8 h-8" style={{ color: 'var(--text-accent)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Welcome to Bash Bootcamp</h2>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Sign in to save your progress</p>
         </div>
 
         <button
           onClick={handleGoogle}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 active:bg-white/15 transition-all duration-150 disabled:opacity-50 text-white font-medium text-sm"
+          className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 disabled:opacity-50 font-medium text-sm active:scale-[0.98]"
+          style={{
+            backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
+            borderColor: 'var(--border-primary)',
+            borderWidth: '1px',
+            color: 'var(--text-primary)'
+          }}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
@@ -52,12 +71,15 @@ export default function AuthModal({ onLogin, onClose }: Props) {
         </button>
 
         {error && (
-          <p className="text-red-400/80 text-xs text-center mt-3 font-mono">{error}</p>
+          <p className="text-xs text-center mt-3 font-mono" style={{ color: 'var(--error)' }}>{error}</p>
         )}
 
         <button
           onClick={onClose}
-          className="w-full text-xs text-white/30 hover:text-white/50 mt-4 transition-colors"
+          className="w-full text-xs mt-4 transition-colors"
+          style={{ color: 'var(--text-tertiary)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-tertiary)' }}
         >
           Maybe later — play locally
         </button>

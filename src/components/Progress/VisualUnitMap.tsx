@@ -1,15 +1,16 @@
 import { useGameStore } from '../../store/gameStore'
 import { content } from '../../content'
 import { getLevel, getRank } from '../../utils/levels'
+import { useTheme } from '../../contexts/ThemeContext'
 
-const beltColors: Record<string, string> = {
-  white: 'border-gray-300 bg-gray-100 text-gray-800',
-  yellow: 'border-yellow-400 bg-yellow-400 text-yellow-900',
-  orange: 'border-orange-400 bg-orange-400 text-orange-900',
-  green: 'border-green-500 bg-green-500 text-green-900',
-  blue: 'border-blue-500 bg-blue-500 text-blue-900',
-  red: 'border-red-500 bg-red-500 text-red-900',
-  black: 'border-gray-700 bg-gray-800 text-white',
+const beltColors: Record<string, { bg: string; border: string; text: string }> = {
+  white: { bg: '#f3f4f6', border: '#d1d5db', text: '#1f2937' },
+  yellow: { bg: '#facc15', border: '#facc15', text: '#713f12' },
+  orange: { bg: '#fb923c', border: '#fb923c', text: '#7c2d12' },
+  green: { bg: '#22c55e', border: '#22c55e', text: '#14532d' },
+  blue: { bg: '#3b82f6', border: '#3b82f6', text: '#1e3a5f' },
+  red: { bg: '#ef4444', border: '#ef4444', text: '#7f1d1d' },
+  black: { bg: '#1f2937', border: '#374151', text: '#ffffff' },
 }
 
 export default function VisualUnitMap() {
@@ -19,6 +20,7 @@ export default function VisualUnitMap() {
   const currentTierId = useGameStore(s => s.currentTierId)
   const startUnit = useGameStore(s => s.startUnit)
   const phase = useGameStore(s => s.phase)
+  const { isDark } = useTheme()
 
   const level = getLevel(xp)
   const rank = getRank(level)
@@ -26,10 +28,10 @@ export default function VisualUnitMap() {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-[10px] font-semibold text-white/40 uppercase tracking-widest font-mono">
+        <h3 className="text-[10px] font-semibold uppercase tracking-widest font-mono" style={{ color: 'var(--text-tertiary)' }}>
           Progression Map
         </h3>
-        <span className="text-[9px] text-white/30 font-mono">
+        <span className="text-[9px] font-mono" style={{ color: 'var(--text-tertiary)', opacity: 0.5 }}>
           {rank.icon} Lv.{level} {rank.title}
         </span>
       </div>
@@ -38,29 +40,41 @@ export default function VisualUnitMap() {
         {content.tiers.map(tier => {
           const isActiveTier = tier.id === currentTierId
           const allCompleted = tier.units.every(u => completedUnits.includes(u.id))
-          const belt = beltColors[tier.belt] || 'border-gray-500 bg-gray-500 text-white'
+          const belt = beltColors[tier.belt] || beltColors.white
 
           return (
             <div
               key={tier.id}
-              className={`group rounded-lg p-2.5 transition-all duration-200 ${
-                isActiveTier
-                  ? 'bg-white/[0.06] border border-crt-green/15 shadow-sm'
+              className="group rounded-lg p-2.5 transition-all duration-200"
+              style={{
+                backgroundColor: isActiveTier
+                  ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)')
                   : allCompleted
-                  ? 'bg-white/[0.03] border border-white/5 opacity-60 hover:opacity-80'
-                  : 'bg-white/[0.02] border border-transparent opacity-30'
-              }`}
+                  ? (isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)')
+                  : 'transparent',
+                border: isActiveTier
+                  ? '1px solid var(--border-primary)'
+                  : '1px solid transparent',
+                opacity: allCompleted ? 0.8 : isActiveTier ? 1 : 0.5
+              }}
             >
               <div className="flex items-center gap-1.5 mb-1.5">
-                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full border ${belt}`}>
+                <span
+                  className="text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                  style={{
+                    backgroundColor: belt.bg,
+                    color: belt.text,
+                    border: `1px solid ${belt.border}`
+                  }}
+                >
                   {tier.belt.toUpperCase()}
                 </span>
-                <span className="text-xs text-white font-medium tracking-tight">{tier.name}</span>
+                <span className="text-xs font-medium tracking-tight" style={{ color: 'var(--text-primary)' }}>{tier.name}</span>
                 {allCompleted && (
-                  <span className="text-[9px] text-crt-green ml-auto font-mono">✓</span>
+                  <span className="text-[9px] ml-auto font-mono" style={{ color: 'var(--text-accent)' }}>✓</span>
                 )}
                 {isActiveTier && !allCompleted && (
-                  <span className="text-[9px] text-crt-green ml-auto font-mono animate-pulse-glow">●</span>
+                  <span className="text-[9px] ml-auto font-mono animate-pulse-glow" style={{ color: 'var(--text-accent)' }}>●</span>
                 )}
               </div>
 
@@ -72,26 +86,68 @@ export default function VisualUnitMap() {
                   const storeState = useGameStore.getState()
                   const isCurrent = isActiveTier && ui === storeState.currentUnitIndex
 
-                  let nodeClass = 'relative w-7 h-7 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all duration-200 select-none'
+                  let nodeStyle: React.CSSProperties = {
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    borderWidth: '2px',
+                    borderStyle: 'solid',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    transition: 'all 0.2s',
+                    cursor: done ? 'default' : unlocked ? 'pointer' : 'not-allowed'
+                  }
+
                   if (done) {
-                    nodeClass += ' bg-crt-green/15 border-crt-green/60 text-crt-green cursor-default'
+                    nodeStyle = {
+                      ...nodeStyle,
+                      backgroundColor: isDark ? 'rgba(0,255,65,0.15)' : 'rgba(0,119,34,0.15)',
+                      borderColor: 'var(--text-accent)',
+                      color: 'var(--text-accent)'
+                    }
                   } else if (isCurrent) {
-                    nodeClass += ' bg-crt-green/10 border-crt-green text-crt-green animate-pulse-glow shadow-sm shadow-crt-green/20'
+                    nodeStyle = {
+                      ...nodeStyle,
+                      backgroundColor: isDark ? 'rgba(0,255,65,0.1)' : 'rgba(0,119,34,0.1)',
+                      borderColor: 'var(--text-accent)',
+                      color: 'var(--text-accent)',
+                      boxShadow: isDark ? '0 0 8px rgba(0,255,65,0.2)' : '0 0 8px rgba(0,119,34,0.2)'
+                    }
                   } else if (unlocked) {
-                    nodeClass += ' bg-white/8 border-white/25 text-white/50 hover:bg-white/15 hover:border-white/40 hover:text-white/70 hover:shadow-sm cursor-pointer'
+                    nodeStyle = {
+                      ...nodeStyle,
+                      backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+                      borderColor: 'var(--border-primary)',
+                      color: 'var(--text-tertiary)'
+                    }
                   } else {
-                    nodeClass += ' bg-white/5 border-white/10 text-white/20 cursor-not-allowed'
+                    nodeStyle = {
+                      ...nodeStyle,
+                      backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                      borderColor: 'var(--border-subtle)',
+                      color: 'var(--text-tertiary)',
+                      opacity: 0.5
+                    }
                   }
 
                   return (
                     <div key={unit.id} className="flex items-center gap-0.5">
                       {ui > 0 && (
-                        <div className={`w-1.5 h-px ${done ? 'bg-crt-green/40' : 'bg-white/10'}`} />
+                        <div
+                          className="w-1.5 h-px"
+                          style={{
+                            backgroundColor: done ? 'var(--text-accent)' : 'var(--border-subtle)',
+                            opacity: done ? 0.4 : 0.3
+                          }}
+                        />
                       )}
                       <button
                         onClick={() => unlocked && !done && phase !== 'challenge' && startUnit(tier.id, ui)}
                         disabled={!unlocked || done || phase === 'challenge'}
-                        className={nodeClass}
+                        style={nodeStyle}
                         title={done ? `✓ ${unit.title}` : unlocked ? unit.title : 'Locked'}
                       >
                         {done ? '✓' : ui + 1}
@@ -106,11 +162,16 @@ export default function VisualUnitMap() {
                 {tier.units.map(unit => (
                   <span
                     key={unit.id}
-                    className={`text-[7px] font-mono truncate ${
-                      unit.id === 't1u1' ? 'max-w-16' : 'max-w-12'
-                    } ${
-                      completedUnits.includes(unit.id) ? 'text-white/35' : unlockedUnits.includes(unit.id) ? 'text-white/25' : 'text-white/10'
-                    }`}
+                    className="text-[7px] font-mono truncate"
+                    style={{
+                      maxWidth: unit.id === 't1u1' ? '64px' : '48px',
+                      color: completedUnits.includes(unit.id)
+                        ? 'var(--text-tertiary)'
+                        : unlockedUnits.includes(unit.id)
+                        ? 'var(--text-tertiary)'
+                        : 'var(--text-tertiary)',
+                      opacity: completedUnits.includes(unit.id) ? 0.5 : unlockedUnits.includes(unit.id) ? 0.4 : 0.3
+                    }}
                   >
                     {unit.title.length > 8 ? unit.title.slice(0, 7) + '…' : unit.title}
                   </span>
