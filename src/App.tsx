@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { onAuthChange, getCurrentUser, logout, loginWithGoogle } from './firebase/auth'
+import { onAuthChange, getCurrentUser } from './firebase/auth'
 import { getUserData, updateUserProgress } from './firebase/firestore'
 import { useGameStore } from './store/gameStore'
 import LandingPage from './pages/LandingPage'
@@ -15,6 +15,7 @@ function App() {
   const [showAuth, setShowAuth] = useState(false)
   const [needsUsername, setNeedsUsername] = useState(false)
   const [pendingUser, setPendingUser] = useState<{ uid: string; displayName: string; photoURL: string; email: string } | null>(null)
+  const [authLoaded, setAuthLoaded] = useState(false)
 
   const setUserId = useGameStore(s => s.setUserId)
   const hydrateState = useGameStore(s => s.hydrateState)
@@ -36,7 +37,12 @@ function App() {
   }, [])
 
   useEffect(() => {
+    let fired = false
     const unsub = onAuthChange(async (user) => {
+      if (!fired) {
+        fired = true
+        setAuthLoaded(true)
+      }
       if (user) {
         const data = await getUserData(user.uid)
         if (data) {
@@ -111,6 +117,10 @@ function App() {
 
   const handleBootComplete = () => {
     setScreen('game')
+  }
+
+  if (!authLoaded) {
+    return <div className="h-screen w-screen bg-[#0a0a0a]" />
   }
 
   return (
