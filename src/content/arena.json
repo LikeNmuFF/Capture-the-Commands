@@ -1,0 +1,128 @@
+{
+  "challenges": [
+    {
+      "id": "arena_log_breach",
+      "title": "Log Breach",
+      "category": "forensics",
+      "difficulty": "easy",
+      "xp": 50,
+      "brief": "A server was breached. Analyze auth.log to find the suspicious IP address that brute-forced its way in.\n\nLook for failed login attempts followed by a successful one.",
+      "hint": "Use grep to find 'Failed password' entries, then look for an IP that also has an 'Accepted password' entry nearby.",
+      "flag": "flag{192_168_1_105_bruteforce}",
+      "setup": {
+        "directories": ["/var/log"],
+        "files": [{ "path": "/var/log/auth.log", "content": "__generated__" }]
+      }
+    },
+    {
+      "id": "arena_hidden_in_plain_sight",
+      "title": "Hidden in Plain Sight",
+      "category": "file_puzzle",
+      "difficulty": "medium",
+      "xp": 100,
+      "brief": "Someone left a flag in the Downloads folder but tried to hide it. Can you find it?\n\nHint: Hidden files start with a dot (.).",
+      "hint": "Use ls -la to see all files, including hidden ones. Look for filenames that seem out of place.",
+      "flag": "flag{d0ts_4r3_h1dd3n}",
+      "setup": {
+        "directories": ["/home/user/Downloads"],
+        "files": [
+          { "path": "/home/user/Downloads/readme.txt", "content": "This is a readme file." },
+          { "path": "/home/user/Downloads/notes.txt", "content": "Meeting notes from yesterday." },
+          { "path": "/home/user/Downloads/budget.xls", "content": "Budget spreadsheet data." },
+          { "path": "/home/user/Downloads/photo.jpg", "content": "JPEG image data." },
+          { "path": "/home/user/Downloads/report.pdf", "content": "Annual report draft." },
+          { "path": "/home/user/Downloads/todo.txt", "content": "Buy groceries, call mom, finish project." },
+          { "path": "/home/user/Downloads/script.sh", "content": "#!/bin/bash\necho 'Hello World'" },
+          { "path": "/home/user/Downloads/data.csv", "content": "id,name,value\n1,foo,100\n2,bar,200" },
+          { "path": "/home/user/Downloads/backup.zip", "content": "PKZIP archive data." },
+          { "path": "/home/user/Downloads/notes_old.txt", "content": "Old notes from last week." },
+          { "path": "/home/user/Downloads/image.png", "content": "PNG image data." },
+          { "path": "/home/user/Downloads/style.css", "content": "body { margin: 0; }" },
+          { "path": "/home/user/Downloads/index.html", "content": "<html><body>Hello</body></html>" },
+          { "path": "/home/user/Downloads/config.ini", "content": "[settings]\nname=test" },
+          { "path": "/home/user/Downloads/README.md", "content": "# Project\nDocumentation." },
+          { "path": "/home/user/Downloads/archive.tar", "content": "TAR archive." },
+          { "path": "/home/user/Downloads/movie.mp4", "content": "MP4 video data." },
+          { "path": "/home/user/Downloads/song.mp3", "content": "MP3 audio data." },
+          { "path": "/home/user/Downloads/.hidden", "content": "You found a hidden file! But this isn't the one." },
+          { "path": "/home/user/Downloads/.config", "content": "Application config data." },
+          { "path": "/home/user/Downloads/.local", "content": "Local application data." },
+          { "path": "/home/user/Downloads/.secret", "content": "flag{d0ts_4r3_h1dd3n}\n" }
+        ]
+      }
+    },
+    {
+      "id": "arena_filtered_flag",
+      "title": "The Filtered Flag",
+      "category": "pipeline",
+      "difficulty": "medium",
+      "xp": 100,
+      "brief": "There's a flag hidden somewhere in the application log. It's buried among hundreds of entries — you'll need to use a pipeline to find it.\n\nHint: grep can search for patterns, cut can extract fields, and sort can organize results.",
+      "hint": "Try grep for 'ERROR' level messages first, then narrow down from there.",
+      "flag": "flag{gr3p_4nd_cut_4r3_p0w3rful}",
+      "setup": {
+        "directories": ["/home/user"],
+        "files": [{ "path": "/home/user/application.log", "content": "__generated__" }]
+      }
+    },
+    {
+      "id": "arena_first_clue",
+      "title": "The First Clue",
+      "category": "mixed",
+      "difficulty": "easy",
+      "xp": 50,
+      "brief": "Follow the path. A flag has been hidden deep inside a maze of directories. Use your navigation skills to reach it.",
+      "hint": "Use ls to see directory contents and cd to move into directories. There's a path from /home/user leading to the flag.",
+      "flag": "flag{p4th_tr4v3rs3r_m4st3r}",
+      "setup": {
+        "directories": [],
+        "files": [
+          { "path": "/home/user/room1", "content": "You enter a dusty room. There's a door to the east." },
+          { "path": "/home/user/room1/north", "content": "A dead end. Try another direction." },
+          { "path": "/home/user/room1/east/room2", "content": "This room has three doors: north, south, and down." },
+          { "path": "/home/user/room1/east/room2/north", "content": "A small closet. Empty." },
+          { "path": "/home/user/room1/east/room2/south", "content": "Leads back to room1." },
+          { "path": "/home/user/room1/east/room2/down/room3", "content": "The air is cold here. A single door leads further down." },
+          { "path": "/home/user/room1/east/room2/down/room3/deeper/vault", "content": "You found the vault! There's a flag here." },
+          { "path": "/home/user/room1/east/room2/down/room3/deeper/vault/flag.txt", "content": "flag{p4th_tr4v3rs3r_m4st3r}\n" },
+          { "path": "/home/user/room1/east/room2/down/room3/deeper/vault/treasure.txt", "content": "Congratulations! You navigated the maze." }
+        ]
+      }
+    },
+    {
+      "id": "arena_stats_report",
+      "title": "The Statistics Report",
+      "category": "pipeline",
+      "difficulty": "hard",
+      "xp": 200,
+      "brief": "A sales report CSV has a flag hidden in it. The flag is in the row with the highest number of units sold. Use sort and head to find it.",
+      "hint": "Sort by the units column numerically in reverse order, then take the first row.",
+      "flag": "flag{s0rt_4nd_h34d_f0r_w1n}",
+      "setup": {
+        "directories": ["/home/user"],
+        "files": [{ "path": "/home/user/sales.csv", "content": "__generated__" }]
+      }
+    },
+    {
+      "id": "arena_gauntlet",
+      "title": "The Gauntlet",
+      "category": "mixed",
+      "difficulty": "hard",
+      "xp": 200,
+      "brief": "A multi-stage challenge. Navigate to the project directory, find the file containing a secret, extract the encoded message, decode it, and capture the flag.\n\nStage 1: Find the secret file in the project\nStage 2: Extract the encoded message using grep\nStage 3: Decode the message to get the flag",
+      "hint": "Start with ls -la to explore the project directory. Look for files with 'secret' in the name or content.",
+      "flag": "flag{th3_g4untl3t_c0mpl3t3}",
+      "setup": {
+        "directories": ["/home/user/project/src", "/home/user/project/docs", "/home/user/project/tests"],
+        "files": [
+          { "path": "/home/user/project/README.md", "content": "# Project X\nA top secret project." },
+          { "path": "/home/user/project/src/main.py", "content": "def main():\n    print('Hello')\n\nif __name__ == '__main__':\n    main()" },
+          { "path": "/home/user/project/src/utils.py", "content": "def helper():\n    return 'useful stuff'" },
+          { "path": "/home/user/project/docs/architecture.md", "content": "# Architecture\nSystem design document." },
+          { "path": "/home/user/project/tests/test_main.py", "content": "def test_main():\n    assert True" },
+          { "path": "/home/user/project/secret.txt", "content": "The encoded flag is: ZmxhZ3t0aDNfZzR1bnRsM3RfYzBtcGwzdDN9\nDecode it to reveal the secret." }
+        ]
+      }
+    }
+  ]
+}
