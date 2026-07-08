@@ -4,12 +4,13 @@ import { subscribeChallenges, ArenaChallenge, seedChallengesIfEmpty } from '../f
 import seedData from '../content/arena.json'
 
 export default function ArenaPage() {
-  const [challenges, setChallenges] = useState<ArenaChallenge[]>([])
+  const [challenges, setChallenges] = useState<ArenaChallenge[]>(seedData.challenges as ArenaChallenge[])
   const [filter, setFilter] = useState('all')
   const [active, setActive] = useState<ArenaChallenge | null>(null)
   const [flagInput, setFlagInput] = useState('')
   const [flagError, setFlagError] = useState('')
   const [flagSuccess, setFlagSuccess] = useState(false)
+  const [firestoreError, setFirestoreError] = useState(false)
 
   const arenaSolved = useGameStore(s => s.arenaSolved)
   const arenaXp = useGameStore(s => s.arenaXp)
@@ -18,9 +19,15 @@ export default function ArenaPage() {
   const exitArenaChallenge = useGameStore(s => s.exitArenaChallenge)
 
   useEffect(() => {
-    seedChallengesIfEmpty(seedData.challenges)
-    const unsub = subscribeChallenges(list => setChallenges(list))
-    return unsub
+    seedChallengesIfEmpty(seedData.challenges).catch(() => {})
+    try {
+      const unsub = subscribeChallenges(list => {
+        if (list.length > 0) setChallenges(list)
+      })
+      return unsub
+    } catch {
+      setFirestoreError(true)
+    }
   }, [])
 
   const handleLaunch = (c: ArenaChallenge) => {
@@ -129,6 +136,14 @@ export default function ArenaPage() {
           {arenaSolved.length} solved · {arenaXp} arena XP
         </p>
       </div>
+
+      {firestoreError && (
+        <div className="mb-3 px-3 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+          <p className="text-[10px] text-yellow-500/70 font-mono">
+            Firestore blocked (ad blocker?) — showing bundled challenges only. Progress won't sync.
+          </p>
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-1.5 mb-4">
         {filters.map(f => (
