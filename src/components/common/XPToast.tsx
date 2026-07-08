@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ReactNode } from 'react'
 import { useGameStore } from '../../store/gameStore'
 
 export interface ToastItem {
@@ -8,7 +8,7 @@ export interface ToastItem {
   message: string
 }
 
-const typeIcons: Record<string, JSX.Element> = {
+const typeIcons: Record<string, ReactNode> = {
   xp: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />

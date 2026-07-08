@@ -9,7 +9,6 @@ export default function ThemeToggle() {
       className="relative w-14 h-7 rounded-full transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-offset-2"
       style={{
         backgroundColor: isDark ? 'var(--bg-tertiary)' : 'var(--bg-tertiary)',
-        focusVisible: { ringColor: 'var(--text-accent)' }
       }}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}

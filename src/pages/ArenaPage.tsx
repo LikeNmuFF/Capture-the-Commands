@@ -4,9 +4,8 @@ import { subscribeChallenges, ArenaChallenge, seedChallengesIfEmpty } from '../f
 import seedData from '../content/arena.json'
 
 export default function ArenaPage() {
-  const [challenges, setChallenges] = useState<ArenaChallenge[]>(
-    seedData.challenges.map(c => ({ ...c, createdBy: '', createdAt: 0 })) as ArenaChallenge[]
-  )
+  const seedChallenges = seedData.challenges.map(c => ({ ...c, createdBy: '', createdAt: 0 }))
+  const [challenges, setChallenges] = useState<ArenaChallenge[]>(seedChallenges as ArenaChallenge[])
   const [filter, setFilter] = useState('all')
   const [active, setActive] = useState<ArenaChallenge | null>(null)
   const [flagInput, setFlagInput] = useState('')
@@ -21,7 +20,7 @@ export default function ArenaPage() {
   const exitArenaChallenge = useGameStore(s => s.exitArenaChallenge)
 
   useEffect(() => {
-    seedChallengesIfEmpty(seedData.challenges).catch(() => {})
+    seedChallengesIfEmpty(seedChallenges).catch(() => {})
     try {
       const unsub = subscribeChallenges(list => {
         if (list.length > 0) setChallenges(list)
