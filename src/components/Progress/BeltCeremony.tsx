@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { content } from '../../content'
 import { getLevel, getRank } from '../../utils/levels'
 import { useTheme } from '../../contexts/ThemeContext'
+import { spring, scaleIn, fadeUp, stagger } from '../../lib/motion'
 
 const beltColors: Record<string, string> = {
   white: '#d1d5db',
@@ -24,6 +26,29 @@ const beltNames: Record<string, string> = {
   black: 'Black',
 }
 
+function useTypingEffect(text: string, speed = 40, startDelay = 600) {
+  const [displayed, setDisplayed] = useState('')
+  const [started, setStarted] = useState(false)
+
+  useEffect(() => {
+    setDisplayed('')
+    setStarted(false)
+    const delay = setTimeout(() => setStarted(true), startDelay)
+    return () => clearTimeout(delay)
+  }, [text, startDelay])
+
+  useEffect(() => {
+    if (!started) return
+    if (displayed.length >= text.length) return
+    const timer = setTimeout(() => {
+      setDisplayed(text.slice(0, displayed.length + 1))
+    }, speed)
+    return () => clearTimeout(timer)
+  }, [started, displayed, text, speed])
+
+  return displayed
+}
+
 export default function BeltCeremony() {
   const tierJustCompleted = useGameStore(s => s.tierJustCompleted)
   const xp = useGameStore(s => s.xp)
@@ -31,13 +56,18 @@ export default function BeltCeremony() {
   const advanceToNextUnit = useGameStore(s => s.advanceToNextUnit)
   const { isDark } = useTheme()
 
+  const [show, setShow] = useState(false)
+
   useEffect(() => {
-    if (tierJustCompleted === null) return
-    const timer = setTimeout(() => {}, 100)
-    return () => clearTimeout(timer)
+    if (tierJustCompleted !== null) {
+      const t = setTimeout(() => setShow(true), 50)
+      return () => clearTimeout(t)
+    } else {
+      setShow(false)
+    }
   }, [tierJustCompleted])
 
-  if (tierJustCompleted === null) return null
+  if (tierJustCompleted === null || !show) return null
 
   const tier = content.tiers.find(t => t.id === tierJustCompleted)
   if (!tier) return null
@@ -47,75 +77,130 @@ export default function BeltCeremony() {
   const beltColor = beltColors[tier.belt] || '#d1d5db'
   const name = beltNames[tier.belt] || tier.belt
 
+  const typedName = useTypingEffect(`${name} Belt Earned!`)
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md animate-fade-in"
-      style={{ backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.6)' }}
-    >
-      <div className="text-center px-6 animate-slide-up">
-        <div
-          className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center animate-pulse-glow"
-          style={{
-            backgroundColor: isDark ? `${beltColor}20` : `${beltColor}30`,
-            border: `2px solid ${beltColor}`,
-            boxShadow: `0 0 30px ${beltColor}40`
-          }}
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md"
+        style={{ backgroundColor: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.7)' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <motion.div
+          className="text-center px-6 max-w-lg"
+          variants={stagger}
+          initial="hidden"
+          animate="show"
         >
-          <svg className="w-12 h-12" style={{ color: beltColor }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-          </svg>
-        </div>
+          {/* Belt icon materializes */}
+          <motion.div
+            className="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center"
+            style={{
+              border: `3px solid ${beltColor}`,
+              boxShadow: `0 0 40px ${beltColor}50, 0 0 80px ${beltColor}20, inset 0 0 20px ${beltColor}15`,
+              background: isDark ? `radial-gradient(circle, ${beltColor}15 0%, transparent 70%)` : `radial-gradient(circle, ${beltColor}20 0%, transparent 70%)`,
+            }}
+            variants={scaleIn}
+            transition={spring}
+          >
+            <svg
+              className="w-12 h-12"
+              style={{ color: beltColor, filter: `drop-shadow(0 0 8px ${beltColor})` }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+              />
+            </svg>
+          </motion.div>
 
-        <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-          {name} Belt Earned!
-        </h1>
-
-        <p className="text-lg mb-2" style={{ color: 'var(--text-secondary)' }}>
-          {tier.name} — Complete
-        </p>
-
-        <p className="text-sm mb-8 font-mono" style={{ color: 'var(--text-tertiary)' }}>
-          {rank.icon} Level {level} {rank.title}
-        </p>
-
-        <div className="flex flex-col items-center gap-3">
-          <div className="flex flex-wrap justify-center gap-2 mb-4">
-            {tier.units.map(unit => (
+          {/* Belt name types out */}
+          <motion.h1
+            className="text-3xl sm:text-4xl font-bold mb-3 font-mono"
+            style={{
+              color: 'var(--text-primary)',
+              textShadow: `0 0 20px ${beltColor}40`,
+            }}
+            variants={fadeUp}
+          >
+            {typedName}
+            {typedName.length < `${name} Belt Earned!`.length && (
               <span
+                className="inline-block w-[3px] h-[1em] ml-1 align-middle animate-pulse"
+                style={{ backgroundColor: beltColor }}
+              />
+            )}
+          </motion.h1>
+
+          {/* Tier name */}
+          <motion.p
+            className="text-lg mb-2"
+            style={{ color: 'var(--text-secondary)' }}
+            variants={fadeUp}
+          >
+            {tier.name} — Complete
+          </motion.p>
+
+          {/* Units list fades in */}
+          <motion.div className="flex flex-wrap justify-center gap-2 my-5" variants={stagger}>
+            {tier.units.map((unit, i) => (
+              <motion.span
                 key={unit.id}
-                className="text-xs px-3 py-1 rounded-full font-mono flex items-center gap-1"
+                className="text-xs px-3 py-1.5 rounded-full font-mono flex items-center gap-1.5"
                 style={{
-                  backgroundColor: isDark ? 'rgba(0,255,65,0.1)' : 'rgba(0,119,34,0.1)',
+                  backgroundColor: isDark ? 'rgba(0,255,65,0.08)' : 'rgba(0,119,34,0.08)',
                   borderColor: 'var(--border-primary)',
                   borderWidth: '1px',
-                  color: 'var(--text-accent)'
+                  color: 'var(--text-accent)',
                 }}
+                variants={fadeUp}
               >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 {unit.title}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
 
-          <button
-            onClick={() => {
-              clearTierComplete()
-              advanceToNextUnit()
-            }}
-            className="px-8 py-3 rounded-xl font-mono text-sm transition-all animate-pulse-glow active:scale-[0.98]"
-            style={{
-              backgroundColor: isDark ? 'rgba(0,255,65,0.2)' : 'rgba(0,119,34,0.2)',
-              borderColor: 'var(--text-accent)',
-              borderWidth: '1px',
-              color: 'var(--text-accent)'
-            }}
+          {/* Current rank info */}
+          <motion.p
+            className="text-sm mb-8 font-mono"
+            style={{ color: 'var(--text-tertiary)' }}
+            variants={fadeUp}
           >
-            Continue to Next Belt →
-          </button>
-        </div>
-      </div>
-    </div>
+            {rank.icon} Level {level} {rank.title}
+          </motion.p>
+
+          {/* Continue button */}
+          <motion.div variants={fadeUp}>
+            <button
+              onClick={() => {
+                clearTierComplete()
+                advanceToNextUnit()
+              }}
+              className="px-8 py-3 rounded-xl font-mono text-sm transition-all animate-pulse-glow active:scale-[0.98] hover:brightness-110"
+              style={{
+                backgroundColor: isDark ? `${beltColor}25` : `${beltColor}30`,
+                borderColor: beltColor,
+                borderWidth: '1px',
+                color: beltColor,
+                boxShadow: `0 0 20px ${beltColor}30`,
+              }}
+            >
+              Continue to Next Belt →
+            </button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }

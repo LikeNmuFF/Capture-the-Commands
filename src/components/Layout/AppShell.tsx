@@ -5,6 +5,7 @@ import ChallengePanel from '../Challenge/ChallengePanel'
 import VisualUnitMap from '../Progress/VisualUnitMap'
 import XPToast from '../common/XPToast'
 import BeltCeremony from '../Progress/BeltCeremony'
+import LevelUpBurst from '../Progress/LevelUpBurst'
 import LeaderboardPage from '../Leaderboard/LeaderboardPage'
 import ThemeToggle from '../common/ThemeToggle'
 import MobileNav from './MobileNav'
@@ -49,6 +50,7 @@ export default function AppShell({ terminal, quizPanel }: Props) {
       {showTutorial && <FirstRunTutorial onDismiss={() => setShowTutorial(false)} />}
       <XPToast />
       <BeltCeremony />
+      <LevelUpBurst />
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
