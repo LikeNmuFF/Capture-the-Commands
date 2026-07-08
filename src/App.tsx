@@ -50,10 +50,14 @@ function App() {
             unlockedUnits: data.unlockedUnits,
           })
           setUserId(user.uid)
+          if ((data as any).role === 'admin') {
+            useGameStore.getState().setAdmin(true)
+          }
           setScreen('game')
         }
       } else {
         setUserId(null)
+        useGameStore.getState().setAdmin(false)
       }
     })
 

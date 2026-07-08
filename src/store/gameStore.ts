@@ -9,6 +9,7 @@ import { verifyFlag } from '../utils/flags'
 import { getLevel } from '../utils/levels'
 import * as VirtualFS from '../engine/VirtualFS'
 import { ToastItem } from '../components/common/XPToast'
+import { applyArenaSetup, ChallengeSetup } from '../utils/arenaSetup'
 
 registerBuiltins()
 
@@ -31,6 +32,10 @@ export interface GameState {
   xpToasts: ToastItem[]
   toastIdCounter: number
   userId: string | null
+  isAdmin: boolean
+  arenaSolved: string[]
+  arenaXp: number
+  activeArenaChallengeId: string | null
 }
 
 export interface GameActions {
@@ -49,6 +54,10 @@ export interface GameActions {
   getCurrentStepHint: () => string
   setUserId: (uid: string | null) => void
   hydrateState: (partial: Partial<Pick<GameState, 'xp' | 'currentTierId' | 'currentUnitIndex' | 'currentStepIndex' | 'phase' | 'completedUnits' | 'unlockedUnits'>>) => void
+  setAdmin: (admin: boolean) => void
+  solveArenaChallenge: (challengeId: string, xp: number) => void
+  launchArenaChallenge: (challengeId: string, setup: ChallengeSetup) => void
+  exitArenaChallenge: () => void
 }
 
 function createInitialEnv(): Environment {
@@ -209,10 +218,37 @@ export const useGameStore = create<GameState & GameActions>()(
       unitJustCompleted: false,
       tierJustCompleted: null,
       userId: null,
+      isAdmin: false,
+      arenaSolved: [],
+      arenaXp: 0,
+      activeArenaChallengeId: null,
       xpToasts: [],
       toastIdCounter: 0,
 
       setUserId: (uid: string | null) => set({ userId: uid }),
+      setAdmin: (admin: boolean) => set({ isAdmin: admin }),
+
+      solveArenaChallenge: (challengeId: string, xp: number) => {
+        const state = get()
+        if (state.arenaSolved.includes(challengeId)) return
+        set({
+          arenaSolved: [...state.arenaSolved, challengeId],
+          arenaXp: state.arenaXp + xp,
+          xp: state.xp + xp,
+        })
+        pushToast(set, get, { amount: xp, type: 'xp', message: `Arena: +${xp} XP (challenge solved!)` })
+      },
+
+      launchArenaChallenge: (challengeId: string, setup: ChallengeSetup) => {
+        const env = createEnvironment()
+        applyArenaSetup(env, challengeId, setup)
+        set({ activeArenaChallengeId: challengeId, env, terminalHistory: [], usedCommands: [] })
+      },
+
+      exitArenaChallenge: () => {
+        const env = createEnvironment()
+        set({ activeArenaChallengeId: null, env, terminalHistory: [], usedCommands: [] })
+      },
 
       hydrateState: (partial) => {
         set({ ...partial, terminalHistory: [], env: createInitialEnv(), usedCommands: [], xpToasts: [], quizScore: null, unitJustCompleted: false, tierJustCompleted: null })
@@ -509,6 +545,10 @@ export const useGameStore = create<GameState & GameActions>()(
           completedUnits: [],
           unlockedUnits: ['t1u1'],
           userId: null,
+          isAdmin: false,
+          arenaSolved: [],
+          arenaXp: 0,
+          activeArenaChallengeId: null,
           terminalHistory: [],
           env: createInitialEnv(),
           usedCommands: [],
@@ -533,6 +573,8 @@ export const useGameStore = create<GameState & GameActions>()(
         quizScore: state.quizScore,
         unitJustCompleted: state.unitJustCompleted,
         tierJustCompleted: state.tierJustCompleted,
+        arenaSolved: state.arenaSolved,
+        arenaXp: state.arenaXp,
       }),
     }
   )
