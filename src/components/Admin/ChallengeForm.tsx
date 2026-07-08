@@ -60,7 +60,7 @@ export default function ChallengeForm({ initial, onSave, onCancel }: Props) {
       <div className="flex gap-3">
         <select
           value={category}
-          onChange={e => setCategory(e.target.value)}
+          onChange={e => setCategory(e.target.value as any)}
           className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-crt-green/40"
         >
           <option value="forensics">Forensics</option>
@@ -70,7 +70,7 @@ export default function ChallengeForm({ initial, onSave, onCancel }: Props) {
         </select>
         <select
           value={difficulty}
-          onChange={e => setDifficulty(e.target.value)}
+          onChange={e => setDifficulty(e.target.value as any)}
           className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-crt-green/40"
         >
           <option value="easy">Easy (50 XP)</option>

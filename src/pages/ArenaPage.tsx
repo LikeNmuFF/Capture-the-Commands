@@ -4,7 +4,9 @@ import { subscribeChallenges, ArenaChallenge, seedChallengesIfEmpty } from '../f
 import seedData from '../content/arena.json'
 
 export default function ArenaPage() {
-  const [challenges, setChallenges] = useState<ArenaChallenge[]>(seedData.challenges as ArenaChallenge[])
+  const [challenges, setChallenges] = useState<ArenaChallenge[]>(
+    seedData.challenges.map(c => ({ ...c, createdBy: '', createdAt: 0 })) as ArenaChallenge[]
+  )
   const [filter, setFilter] = useState('all')
   const [active, setActive] = useState<ArenaChallenge | null>(null)
   const [flagInput, setFlagInput] = useState('')
