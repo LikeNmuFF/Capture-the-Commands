@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useTheme } from '../contexts/ThemeContext'
 import { content } from '../content'
 import { RANKS } from '../utils/levels'
 import Button from '../components/ui/Button'
@@ -40,7 +39,6 @@ const terminalScript: Line[] = [
 const totalUnits = content.tiers.reduce((sum, t) => sum + t.units.length, 0)
 
 export default function LandingPage({ onStart, onSignIn, signedIn }: Props) {
-  const { isDark } = useTheme()
   const [visibleCount, setVisibleCount] = useState(0)
 
   useEffect(() => {
