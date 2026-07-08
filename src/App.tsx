@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react'
 import { onAuthChange, getCurrentUser, logout, loginWithGoogle } from './firebase/auth'
 import { getUserData, updateUserProgress } from './firebase/firestore'
 import { useGameStore } from './store/gameStore'
+import LandingPage from './pages/LandingPage'
 import WelcomePage from './pages/WelcomePage'
 import BootcampPage from './pages/BootcampPage'
 import AuthModal from './components/Auth/AuthModal'
 import UsernameSetup from './components/Auth/UsernameSetup'
 
+type Screen = 'landing' | 'boot' | 'game'
+
 function App() {
-  const [started, setStarted] = useState(false)
+  const [screen, setScreen] = useState<Screen>('landing')
   const [showAuth, setShowAuth] = useState(false)
   const [needsUsername, setNeedsUsername] = useState(false)
   const [pendingUser, setPendingUser] = useState<{ uid: string; displayName: string; photoURL: string; email: string } | null>(null)
@@ -47,6 +50,7 @@ function App() {
             unlockedUnits: data.unlockedUnits,
           })
           setUserId(user.uid)
+          setScreen('game')
         }
       } else {
         setUserId(null)
@@ -61,11 +65,11 @@ function App() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleStart = () => {
-    setStarted(true)
+  const handleGuestStart = () => {
+    setScreen('boot')
   }
 
-  const handleLoginFromWelcome = () => {
+  const handleSignIn = () => {
     setShowAuth(true)
   }
 
@@ -87,6 +91,7 @@ function App() {
           unlockedUnits: data.unlockedUnits,
         })
         setUserId(uid)
+        setScreen('game')
       }
     }
   }
@@ -97,17 +102,26 @@ function App() {
       setUserId(pendingUser.uid)
       setPendingUser(null)
     }
+    setScreen('boot')
+  }
+
+  const handleBootComplete = () => {
+    setScreen('game')
   }
 
   return (
     <>
-      {started ? <BootcampPage /> : (
-        <WelcomePage
-          onStart={handleStart}
-          onSignIn={handleLoginFromWelcome}
+      {screen === 'landing' && (
+        <LandingPage
+          onStart={handleGuestStart}
+          onSignIn={handleSignIn}
           signedIn={!!getCurrentUser()}
         />
       )}
+      {screen === 'boot' && (
+        <WelcomePage onStart={handleBootComplete} />
+      )}
+      {screen === 'game' && <BootcampPage />}
 
       {showAuth && (
         <AuthModal

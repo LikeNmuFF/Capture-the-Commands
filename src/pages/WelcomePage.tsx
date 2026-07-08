@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 
 interface Props {
   onStart: () => void
-  onSignIn: () => void
-  signedIn: boolean
 }
 
 const bootLines = [
@@ -14,12 +12,12 @@ const bootLines = [
   { text: '[  OK  ] Preparing mission control...', delay: 300 },
   { text: '', delay: 100 },
   { text: '=== Bash Bootcamp v1.0.0 ===', delay: 200 },
-  { text: '6 Tiers • 20+ Missions • CTF Arena Ready', delay: 150 },
+  { text: '6 Tiers • 16 Units • CTF Arena Ready', delay: 150 },
   { text: '', delay: 100 },
   { text: 'SYSTEM READY. Press any key to enter bootcamp.', delay: 300 },
 ]
 
-export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
+export default function WelcomePage({ onStart }: Props) {
   const [visibleLines, setVisibleLines] = useState<number>(0)
   const [showPrompt, setShowPrompt] = useState(false)
   const [bootComplete, setBootComplete] = useState(false)
@@ -72,7 +70,6 @@ export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
   return (
     <div className="h-screen w-screen bg-[#0a0a0a] flex items-center justify-center crt-overlay">
       <div className="w-full max-w-2xl px-8">
-        {/* Boot progress */}
         <div className="w-full h-1 bg-white/5 rounded-full mb-8 overflow-hidden">
           <div
             className="h-full bg-crt-green rounded-full transition-all duration-300 ease-out"
@@ -80,7 +77,6 @@ export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
           />
         </div>
 
-        {/* Boot output */}
         <div className="font-mono text-sm space-y-1">
           {bootLines.slice(0, visibleLines).map((line, i) => (
             <div
@@ -94,7 +90,6 @@ export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
           ))}
         </div>
 
-        {/* Press any key prompt */}
         {showPrompt && (
           <div className="mt-12 text-center animate-fade-in">
             <div className="font-mono text-crt-green text-lg animate-pulse-glow mb-2">
@@ -103,20 +98,6 @@ export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
             <div className="text-[10px] text-gray-600 font-mono mt-8">
               {`[ CLICK OR PRESS ANY KEY TO START ]`}
             </div>
-
-            {/* Sign-in */}
-            <div className="mt-6">
-              {signedIn ? (
-                <div className="text-[11px] text-crt-green/50 font-mono">✓ Signed in — progress auto-saves</div>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onSignIn() }}
-                  className="text-[11px] text-white/20 hover:text-crt-green/60 font-mono transition-colors cursor-pointer"
-                >
-                  Sign in with Google to save progress →
-                </button>
-              )}
-            </div>
             <div className="mt-12 text-xs text-gray-700 font-mono">
               <span className="text-crt-green-dim">user</span>@<span className="text-crt-green-dim">bash-bootcamp</span>
               <span className="text-white/20">:</span><span className="text-blue-400/40">~</span>$ _
@@ -124,7 +105,6 @@ export default function WelcomePage({ onStart, onSignIn, signedIn }: Props) {
           </div>
         )}
 
-        {/* Keyboard particles */}
         {showPrompt && (
           <div className="fixed bottom-8 left-0 right-0 text-center">
             <div className="inline-flex gap-3 text-[10px] text-gray-700 font-mono">
