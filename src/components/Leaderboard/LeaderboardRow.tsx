@@ -1,5 +1,5 @@
 import { LeaderboardEntry } from '../../firebase/firestore'
-import { getLevel } from '../../utils/levels'
+import { getLevel, getRank } from '../../utils/levels'
 
 interface Props {
   entry: LeaderboardEntry
@@ -12,7 +12,8 @@ interface Props {
 }
 
 export default function LeaderboardRow({ entry, rank, isMe, isFollowing, currentUid, onFollow, onUnfollow }: Props) {
-  const level = getLevel(entry.xp)
+  const levelNum = getLevel(entry.xp)
+  const rankInfo = getRank(levelNum)
   const rankColors = ['', 'text-yellow-400', 'text-gray-300', 'text-amber-600']
 
   return (
@@ -44,9 +45,9 @@ export default function LeaderboardRow({ entry, rank, isMe, isFollowing, current
           )}
         </div>
         <div className="flex items-center gap-2 text-xs text-white/30 font-mono">
-          <span>Lv.{level.level}</span>
+          <span>Lv.{levelNum}</span>
           <span>•</span>
-          <span>{level.rank}</span>
+          <span>{rankInfo.title}</span>
           <span>•</span>
           <span>{entry.xp} XP</span>
         </div>
