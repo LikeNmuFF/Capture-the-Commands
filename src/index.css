@@ -1,15 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-crt-green: #00ff41;
-  --color-crt-green-dim: #00cc33;
-  --color-crt-green-dark: #003b00;
+  --color-bg: #060a12;
+  --color-bg-2: #0a1018;
+  --color-surface: #0f1620;
+  --color-surface-2: #141d29;
+  --color-glass: rgba(15, 22, 32, 0.72);
+  --color-border: rgba(57, 255, 20, 0.18);
+  --color-border-soft: rgba(120, 160, 200, 0.12);
+  --color-text: #e6f0ff;
+  --color-text-2: #9fb3c8;
+  --color-text-3: #5b7088;
+  --color-accent: #39ff14;
+  --color-accent-cyan: #00f0ff;
+  --color-accent-magenta: #ff2e88;
+  --color-warning: #ffb000;
+  --color-error: #ff4d6d;
+  --color-success: #39ff14;
+  --font-display: 'Space Mono', 'JetBrains Mono', monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Backward-compatible aliases for legacy component classes */
+  --color-crt-green: #39ff14;
+  --color-crt-green-dim: #2ecc10;
+  --color-crt-green-dark: #0a3d00;
   --color-crt-amber: #ffb000;
   --color-apple-red: #ff5f57;
   --color-apple-yellow: #febc2e;
   --color-apple-green: #28c840;
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --color-surface-light: #0f1620;
+  --color-glass-border: rgba(57, 255, 20, 0.18);
 }
 
 :root {
@@ -17,56 +37,61 @@
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
+  --grid: rgba(57, 255, 20, 0.06);
 }
 
 /* Dark theme (default) */
 .dark {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-tertiary: #21262d;
-  --bg-surface: rgba(22, 27, 34, 0.95);
-  --bg-glass: rgba(22, 27, 34, 0.8);
-  --border-primary: rgba(48, 54, 61, 0.6);
-  --border-subtle: rgba(48, 54, 61, 0.3);
-  --text-primary: #f0f6fc;
-  --text-secondary: #8b949e;
-  --text-tertiary: #484f58;
-  --text-accent: #00ff41;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
-  --overlay: rgba(0, 0, 0, 0.7);
-  --input-bg: #0d1117;
-  --input-border: rgba(48, 54, 61, 0.8);
-  --success: #28c840;
-  --warning: #febc2e;
-  --error: #ff5f57;
-  --info: #58a6ff;
+  --bg-primary: #060a12;
+  --bg-secondary: #0a1018;
+  --bg-tertiary: #141d29;
+  --bg-surface: rgba(15, 22, 32, 0.95);
+  --bg-glass: rgba(15, 22, 32, 0.72);
+  --border-primary: rgba(57, 255, 20, 0.18);
+  --border-subtle: rgba(120, 160, 200, 0.12);
+  --text-primary: #e6f0ff;
+  --text-secondary: #9fb3c8;
+  --text-tertiary: #5b7088;
+  --text-accent: #39ff14;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --overlay: rgba(2, 6, 12, 0.78);
+  --input-bg: #0a1018;
+  --input-border: rgba(120, 160, 200, 0.22);
+  --success: #39ff14;
+  --warning: #ffb000;
+  --error: #ff4d6d;
+  --info: #00f0ff;
+  --neon-glow: 0 0 12px rgba(57, 255, 20, 0.35);
+  --cyan-glow: 0 0 12px rgba(0, 240, 255, 0.35);
 }
 
-/* Light theme */
+/* Light theme — "paper terminal" */
 .light {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f6f8fa;
-  --bg-tertiary: #eaeef2;
-  --bg-surface: rgba(255, 255, 255, 0.95);
-  --bg-glass: rgba(255, 255, 255, 0.8);
-  --border-primary: rgba(208, 215, 222, 0.8);
-  --border-subtle: rgba(208, 215, 222, 0.4);
-  --text-primary: #1f2328;
-  --text-secondary: #656d76;
-  --text-tertiary: #8b949e;
-  --text-accent: #007722;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --overlay: rgba(0, 0, 0, 0.5);
+  --bg-primary: #eef2f7;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #e2e8f0;
+  --bg-surface: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(255, 255, 255, 0.78);
+  --border-primary: rgba(0, 119, 34, 0.22);
+  --border-subtle: rgba(30, 50, 80, 0.12);
+  --text-primary: #0c1a2b;
+  --text-secondary: #3d526b;
+  --text-tertiary: #7c8da0;
+  --text-accent: #0a9c2e;
+  --shadow-sm: 0 1px 2px rgba(10, 20, 40, 0.08);
+  --shadow-md: 0 8px 24px rgba(10, 20, 40, 0.1);
+  --shadow-lg: 0 24px 64px rgba(10, 20, 40, 0.14);
+  --overlay: rgba(20, 30, 45, 0.45);
   --input-bg: #ffffff;
-  --input-border: rgba(208, 215, 222, 0.8);
-  --success: #1a7f37;
+  --input-border: rgba(30, 50, 80, 0.2);
+  --success: #0a9c2e;
   --warning: #9a6700;
   --error: #d1242f;
-  --info: #0969da;
+  --info: #0a7da0;
+  --neon-glow: 0 0 10px rgba(10, 156, 46, 0.25);
+  --cyan-glow: 0 0 10px rgba(10, 125, 160, 0.25);
 }
 
 @layer base {
@@ -85,7 +110,20 @@
   }
 }
 
-/* Safe area utilities */
+/* Grid + glow background helpers */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-radial-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(57, 255, 20, 0.1), transparent 70%),
+    radial-gradient(40% 40% at 100% 100%, rgba(0, 240, 255, 0.08), transparent 70%);
+}
+
 .safe-bottom {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
 }
@@ -94,19 +132,19 @@
   padding-top: max(env(safe-area-inset-top, 0px), 0px);
 }
 
-/* Responsive text */
 .text-responsive {
   font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 .terminal-text {
+  font-family: var(--font-display);
   font-size: clamp(0.7rem, 1.8vw, 0.875rem);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-/* Custom scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -241,6 +279,26 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes grid-pan {
+  from { background-position: 0 0; }
+  to { background-position: 48px 48px; }
+}
+
+@keyframes scan-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes neon-breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
 /* Animation utilities */
 .animate-blink {
   animation: blink 1s step-end infinite;
@@ -302,6 +360,22 @@
   animation: spin-slow 3s linear infinite;
 }
 
+.animate-grid-pan {
+  animation: grid-pan 8s linear infinite;
+}
+
+.animate-scan-sweep {
+  animation: scan-sweep 3.2s ease-in-out infinite;
+}
+
+.animate-neon-breathe {
+  animation: neon-breathe 2.4s ease-in-out infinite;
+}
+
+.animate-float-y {
+  animation: float-y 4s ease-in-out infinite;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .animate-blink,
@@ -309,7 +383,11 @@
   .animate-flicker,
   .animate-shimmer,
   .animate-bounce-subtle,
-  .animate-spin-slow {
+  .animate-spin-slow,
+  .animate-grid-pan,
+  .animate-scan-sweep,
+  .animate-neon-breathe,
+  .animate-float-y {
     animation: none;
   }
 
@@ -361,7 +439,7 @@ a {
 }
 
 a:hover {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 /* Selection */

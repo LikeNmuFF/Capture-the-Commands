@@ -7,6 +7,7 @@ import BeltCeremony from '../Progress/BeltCeremony'
 import LeaderboardPage from '../Leaderboard/LeaderboardPage'
 import ThemeToggle from '../common/ThemeToggle'
 import MobileNav from './MobileNav'
+import FirstRunTutorial from '../Onboarding/FirstRunTutorial'
 import { useGameStore } from '../../store/gameStore'
 import { logout } from '../../firebase/auth'
 import { getLevel, getRank } from '../../utils/levels'
@@ -21,6 +22,7 @@ export default function AppShell({ terminal, quizPanel }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarTab, setSidebarTab] = useState<'mission' | 'leaderboard'>('mission')
   const [mobileTab, setMobileTab] = useState('terminal')
+  const [showTutorial, setShowTutorial] = useState(!localStorage.getItem('bash-bootcamp-tutorial-seen'))
   const phase = useGameStore(s => s.phase)
   const xp = useGameStore(s => s.xp)
   const userId = useGameStore(s => s.userId)
@@ -39,6 +41,7 @@ export default function AppShell({ terminal, quizPanel }: Props) {
 
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      {showTutorial && <FirstRunTutorial onDismiss={() => setShowTutorial(false)} />}
       <XPToast />
       <BeltCeremony />
 

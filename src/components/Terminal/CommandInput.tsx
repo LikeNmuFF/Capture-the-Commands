@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTheme } from '../../contexts/ThemeContext'
 
 interface Props {
   value: string
@@ -6,9 +7,13 @@ interface Props {
   onKeyDown: (e: React.KeyboardEvent) => void
   inputRef: React.RefObject<HTMLInputElement | null>
   disabled?: boolean
+  suggestion?: string
+  onSuggestionClick?: () => void
 }
 
-export default function CommandInput({ value, onChange, onKeyDown, inputRef, disabled }: Props) {
+export default function CommandInput({ value, onChange, onKeyDown, inputRef, disabled, suggestion, onSuggestionClick }: Props) {
+  const { isDark } = useTheme()
+
   useEffect(() => {
     if (!disabled) {
       inputRef.current?.focus()
@@ -21,22 +26,47 @@ export default function CommandInput({ value, onChange, onKeyDown, inputRef, dis
         user@bash-bootcamp:~$
       </span>
       <span className="mx-1" style={{ color: 'var(--text-tertiary)' }}>$</span>
-      <input
-        ref={inputRef}
-        type="text"
-        value={disabled ? '(locked)' : value}
-        onChange={e => !disabled && onChange(e.target.value)}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
-        className="flex-1 bg-transparent outline-none border-none font-mono terminal-text min-w-0"
-        style={{
-          color: 'var(--text-accent)',
-          caretColor: 'var(--text-accent)'
-        }}
-        spellCheck={false}
-        autoComplete="off"
-        autoFocus
-      />
+      <div className="relative flex-1 min-w-0">
+        <input
+          ref={inputRef}
+          type="text"
+          value={disabled ? '(locked)' : value}
+          onChange={e => !disabled && onChange(e.target.value)}
+          onKeyDown={onKeyDown}
+          disabled={disabled}
+          className="relative z-10 w-full bg-transparent outline-none border-none font-mono terminal-text min-w-0"
+          style={{
+            color: 'var(--text-accent)',
+            caretColor: 'var(--text-accent)',
+          }}
+          spellCheck={false}
+          autoComplete="off"
+          autoFocus
+        />
+        {!value && !disabled && (
+          <span
+            className="absolute inset-0 z-0 flex items-center pointer-events-none text-xs animate-pulse select-none"
+            style={{ color: isDark ? 'rgba(0,255,65,0.2)' : 'rgba(0,119,34,0.25)' }}
+          >
+            Type a command...
+          </span>
+        )}
+      </div>
+      {suggestion && !disabled && (
+        <button
+          onClick={onSuggestionClick}
+          className="ml-2 shrink-0 text-[10px] px-2 py-0.5 rounded font-mono transition-all duration-200 animate-fade-in"
+          style={{
+            backgroundColor: isDark ? 'rgba(0,255,65,0.1)' : 'rgba(0,119,34,0.1)',
+            border: '1px solid var(--border-subtle)',
+            color: 'var(--text-accent)',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = isDark ? 'rgba(0,255,65,0.2)' : 'rgba(0,119,34,0.2)' }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = isDark ? 'rgba(0,255,65,0.1)' : 'rgba(0,119,34,0.1)' }}
+        >
+          Try: {suggestion}
+        </button>
+      )}
     </div>
   )
 }

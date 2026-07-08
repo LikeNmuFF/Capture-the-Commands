@@ -1,7 +1,50 @@
+import { useMemo } from 'react'
 import { useMission } from '../../hooks/useMission'
 import { useGameStore } from '../../store/gameStore'
 import HintButton from './HintButton'
 import { useTheme } from '../../contexts/ThemeContext'
+
+function extractCommands(text: string): string[] {
+  const matches = text.match(/`([^`]+)`/g)
+  if (!matches) return []
+  return matches.map(m => m.replace(/`/g, '')).filter(cmd => {
+    const first = cmd.split(/\s+/)[0]
+    return ['pwd','ls','cd','mkdir','touch','cat','echo','rm','cp','mv','grep','find','head','tail','chmod','whoami','clear','help','cd','ls','|','>','>>'].includes(first)
+  })
+}
+
+function fillInput(cmd: string) {
+  const event = new CustomEvent('fill-command', { detail: cmd })
+  window.dispatchEvent(event)
+}
+
+function renderInstruction(text: string, onClick: (cmd: string) => void) {
+  const parts = text.split(/(`[^`]+`)/g)
+  return parts.map((part, i) => {
+    if (part.startsWith('`') && part.endsWith('`')) {
+      const cmd = part.slice(1, -1)
+      return (
+        <code
+          key={i}
+          onClick={() => onClick(cmd)}
+          className="cursor-pointer transition-colors rounded px-1"
+          style={{
+            backgroundColor: 'var(--text-accent)',
+            color: 'var(--bg-primary)',
+            fontSize: 'inherit',
+            opacity: 0.9,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.opacity = '1' }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = '0.9' }}
+          title={`Click to type "${cmd}"`}
+        >
+          {cmd}
+        </code>
+      )
+    }
+    return <span key={i}>{part}</span>
+  })
+}
 
 export default function MissionPanel() {
   const { objectives, allComplete, hasObjectives } = useMission()
@@ -109,7 +152,7 @@ export default function MissionPanel() {
           <div className="rounded-lg p-3" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', border: '1px solid var(--border-subtle)' }}>
             <div className="text-[10px] uppercase tracking-wider mb-1.5 font-mono" style={{ color: 'var(--text-tertiary)' }}>Mission</div>
             <p className="text-xs leading-relaxed" style={{ color: 'var(--text-primary)', opacity: 0.85 }}>
-              {getCurrentStepDescription()}
+              {renderInstruction(getCurrentStepDescription(), fillInput)}
             </p>
           </div>
 

@@ -12,10 +12,16 @@ const bootLines = [
   { text: '[  OK  ] Starting command parser...', delay: 200 },
   { text: '[  OK  ] Preparing mission control...', delay: 300 },
   { text: '', delay: 100 },
-  { text: '=== Bash Bootcamp v1.0.0 ===', delay: 200 },
+  { text: '=== Capture the Command v1.0.0 ===', delay: 200 },
   { text: '3 Tiers • 16 Units • CTF Arena Ready', delay: 150 },
   { text: '', delay: 100 },
-  { text: 'SYSTEM READY. Press any key to enter bootcamp.', delay: 300 },
+  { text: 'What to expect:', delay: 400 },
+  { text: '  • Type commands into the terminal to complete missions', delay: 250 },
+  { text: '  • Each step tells you which command to run', delay: 200 },
+  { text: '  • Click any command in the instructions to auto-type it', delay: 300 },
+  { text: '  • Pass quizzes and find flags to level up your rank', delay: 200 },
+  { text: '', delay: 150 },
+  { text: 'SYSTEM READY. Press any key to begin your journey.', delay: 400 },
 ]
 
 export default function WelcomePage({ onStart }: Props) {

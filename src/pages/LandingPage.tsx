@@ -53,6 +53,30 @@ export default function LandingPage({ onStart, onSignIn, signedIn }: Props) {
             <span>6 Ranks</span>
           </div>
 
+          {/* How it works for beginners */}
+          <div
+            className="mt-5 p-3 rounded-xl text-[10px] font-mono leading-relaxed text-left"
+            style={{
+              backgroundColor: isDark ? 'rgba(0,255,65,0.03)' : 'rgba(0,119,34,0.03)',
+              border: '1px solid var(--border-subtle)',
+              color: 'var(--text-tertiary)',
+            }}
+          >
+            <div className="flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--text-accent)' }}>
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-semibold">New to terminal? Here's how it works:</span>
+            </div>
+            <div className="space-y-1">
+              <div><span style={{ color: 'var(--text-accent)' }}>1.</span> Read the mission step on the left panel</div>
+              <div><span style={{ color: 'var(--text-accent)' }}>2.</span> Type the command shown in the terminal below</div>
+              <div><span style={{ color: 'var(--text-accent)' }}>3.</span> Press Enter and watch it work!</div>
+              <div><span style={{ color: 'var(--text-accent)' }}>4.</span> Complete all objectives to advance</div>
+            </div>
+            <div className="mt-1.5 pt-1.5" style={{ borderTop: '1px solid var(--border-subtle)' }}>No experience needed — we'll guide you step by step!</div>
+          </div>
+
           {/* Divider */}
           <div className="my-6 border-t" style={{ borderColor: 'var(--border-subtle)' }} />
 

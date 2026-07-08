@@ -395,6 +395,16 @@ export const useGameStore = create<GameState & GameActions>()(
             }
           }
 
+          const congrats = [
+            'Amazing work!',
+            'You crushed it!',
+            'Flag captured!',
+            'Outstanding!',
+            'Brilliant!',
+            'You\'re on fire!',
+          ]
+          const cheer = congrats[Math.floor(Math.random() * congrats.length)]
+
           set({
             xp: state.xp + xpGained,
             completedUnits: newCompleted,
@@ -404,7 +414,8 @@ export const useGameStore = create<GameState & GameActions>()(
             phase: 'completed',
             terminalHistory: [
               ...state.terminalHistory,
-              { type: 'system', text: `\n🎉 Correct! Flag verified: ${flag}` },
+              { type: 'system', text: `\n🎉 ${cheer}` },
+              { type: 'system', text: `Flag verified: ${flag}` },
               { type: 'system', text: `+${xpGained} XP earned!` },
             ],
           })
@@ -483,13 +494,28 @@ export const useGameStore = create<GameState & GameActions>()(
 
         const nextStepIndex = state.currentStepIndex + 1
 
+        const encouragement = [
+          'Great work!',
+          'Nice one!',
+          'You got it!',
+          'Well done!',
+          'Keep going!',
+          'Awesome!',
+          'Perfect!',
+          'Excellent!',
+          'Moving right along!',
+          'Nailed it!',
+        ]
+        const msg = encouragement[Math.floor(Math.random() * encouragement.length)]
+
         if (nextStepIndex >= unit.missionSteps.length) {
           set({
             phase: 'quiz',
             currentStepIndex: nextStepIndex,
             terminalHistory: [
               ...state.terminalHistory,
-              { type: 'system', text: '--- Mission complete! Time for a quick quiz. ---' },
+              { type: 'system', text: `\n✓ ${msg} Mission objectives complete!` },
+              { type: 'system', text: '--- Time for a quick quiz! ---' },
             ],
           })
         } else {
@@ -498,6 +524,7 @@ export const useGameStore = create<GameState & GameActions>()(
             usedCommands: [],
             terminalHistory: [
               ...state.terminalHistory,
+              { type: 'system', text: `\n✓ ${msg}` },
               { type: 'system', text: `Step ${nextStepIndex + 1}: ${unit.missionSteps[nextStepIndex].instruction}` },
             ],
           })
@@ -510,10 +537,24 @@ export const useGameStore = create<GameState & GameActions>()(
         if (unit) setupUnitFS(env, unit.id)
 
         const unitInfo = getUnit(tierId, unitIndex)
+        const isFirstUnit = tierId === 1 && unitIndex === 0
         const introLines: TerminalLine[] = []
         if (unitInfo) {
+          if (isFirstUnit) {
+            introLines.push(
+              { type: 'system', text: `\n========================================` },
+              { type: 'system', text: `  Welcome to your first mission! 🚀` },
+              { type: 'system', text: `========================================` },
+              { type: 'system', text: '' },
+              { type: 'system', text: `This is a terminal. You type commands and press Enter.` },
+              { type: 'system', text: `Your first command will be: \`pwd\` (print working directory).` },
+              { type: 'system', text: `Look at the mission panel on the left for instructions.` },
+              { type: 'system', text: `You can also click any \`command\` in the instructions to auto-type it!` },
+              { type: 'system', text: '' },
+            )
+          }
           introLines.push(
-            { type: 'system', text: `\n=== ${unitInfo.title} ===` },
+            { type: 'system', text: `=== ${unitInfo.title} ===` },
             { type: 'system', text: `Commands: ${unitInfo.commands.join(', ')}` },
             { type: 'system', text: '' },
             { type: 'system', text: unitInfo.missionSteps[0]?.instruction || '' },
