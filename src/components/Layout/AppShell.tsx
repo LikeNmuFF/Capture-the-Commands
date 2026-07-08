@@ -5,6 +5,8 @@ import VisualUnitMap from '../Progress/VisualUnitMap'
 import XPToast from '../common/XPToast'
 import BeltCeremony from '../Progress/BeltCeremony'
 import LeaderboardPage from '../Leaderboard/LeaderboardPage'
+import ArenaPage from '../../pages/ArenaPage'
+import AdminPanel from '../../pages/AdminPanel'
 import MobileNav from './MobileNav'
 import { useGameStore } from '../../store/gameStore'
 import { logout } from '../../firebase/auth'
@@ -17,11 +19,12 @@ interface Props {
 
 export default function AppShell({ terminal, quizPanel }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarTab, setSidebarTab] = useState<'mission' | 'leaderboard'>('mission')
+  const [sidebarTab, setSidebarTab] = useState<'mission' | 'arena' | 'leaderboard' | 'admin'>('mission')
   const [mobileTab, setMobileTab] = useState('terminal')
   const phase = useGameStore(s => s.phase)
   const xp = useGameStore(s => s.xp)
   const userId = useGameStore(s => s.userId)
+  const isAdmin = useGameStore(s => s.isAdmin)
 
   const level = getLevel(xp)
   const rank = getRank(level)
@@ -30,9 +33,14 @@ export default function AppShell({ terminal, quizPanel }: Props) {
     setMobileTab('terminal')
   }, [phase])
 
-  const sidebarContent = sidebarTab === 'leaderboard'
-    ? <LeaderboardPage currentUid={userId} />
-    : phase === 'challenge' ? <ChallengePanel /> : <MissionPanel />
+  const sidebarContent = (() => {
+    switch (sidebarTab) {
+      case 'arena': return <ArenaPage />
+      case 'leaderboard': return <LeaderboardPage currentUid={userId} />
+      case 'admin': return isAdmin ? <AdminPanel /> : null
+      default: return phase === 'challenge' ? <ChallengePanel /> : <MissionPanel />
+    }
+  })()
 
   return (
     <div className="h-screen w-screen flex flex-col bg-surface overflow-hidden">
@@ -75,6 +83,16 @@ export default function AppShell({ terminal, quizPanel }: Props) {
             {phase === 'challenge' ? 'Challenge' : 'Mission'}
           </button>
           <button
+            onClick={() => setSidebarTab('arena')}
+            className={`text-[11px] px-3 py-1.5 rounded-lg font-mono transition-colors ${
+              sidebarTab === 'arena'
+                ? 'bg-crt-green/15 text-crt-green'
+                : 'text-white/30 hover:text-white/50'
+            }`}
+          >
+            Arena
+          </button>
+          <button
             onClick={() => setSidebarTab('leaderboard')}
             className={`text-[11px] px-3 py-1.5 rounded-lg font-mono transition-colors ${
               sidebarTab === 'leaderboard'
@@ -84,6 +102,18 @@ export default function AppShell({ terminal, quizPanel }: Props) {
           >
             Leaderboard
           </button>
+          {isAdmin && (
+            <button
+              onClick={() => setSidebarTab('admin')}
+              className={`text-[11px] px-3 py-1.5 rounded-lg font-mono transition-colors ${
+                sidebarTab === 'admin'
+                  ? 'bg-crt-green/15 text-crt-green'
+                  : 'text-white/30 hover:text-white/50'
+              }`}
+            >
+              Admin
+            </button>
+          )}
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
           {sidebarContent}
@@ -187,6 +217,16 @@ export default function AppShell({ terminal, quizPanel }: Props) {
           {mobileTab === 'leaderboard' && (
             <div className="h-full overflow-y-auto p-4 custom-scrollbar">
               <LeaderboardPage currentUid={userId} />
+            </div>
+          )}
+          {mobileTab === 'arena' && (
+            <div className="h-full overflow-y-auto custom-scrollbar">
+              <ArenaPage />
+            </div>
+          )}
+          {mobileTab === 'admin' && isAdmin && (
+            <div className="h-full overflow-y-auto custom-scrollbar">
+              <AdminPanel />
             </div>
           )}
         </div>
