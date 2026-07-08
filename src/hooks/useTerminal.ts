@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { TerminalLine, ObjectiveData } from '../types'
 import { checkObjective } from '../utils/objectiveCheckers'
@@ -11,6 +11,22 @@ export function useTerminal() {
   const terminalEndRef = useRef<HTMLDivElement>(null)
 
   const terminalHistory = useGameStore(s => s.terminalHistory)
+
+  const fillCommand = useCallback((cmd: string) => {
+    setInput(cmd)
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 0)
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent<string>
+      fillCommand(customEvent.detail)
+    }
+    window.addEventListener('fill-command', handler)
+    return () => window.removeEventListener('fill-command', handler)
+  }, [fillCommand])
 
   const handleCommand = useCallback((cmd: string) => {
     if (!cmd.trim()) return
@@ -77,5 +93,6 @@ export function useTerminal() {
     terminalHistory,
     historyIndex,
     commandHistory,
+    fillCommand,
   }
 }

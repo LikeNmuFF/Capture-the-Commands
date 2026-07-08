@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useGameStore } from '../store/gameStore'
-import { subscribeChallenges, ArenaChallenge, seedChallengesIfEmpty } from '../firebase/arenaChallenges'
+import { subscribeChallenges, ArenaChallenge, ArenaChallengeInput, seedChallengesIfEmpty } from '../firebase/arenaChallenges'
 import seedData from '../content/arena.json'
 
 export default function ArenaPage() {
-  const seedChallenges = seedData.challenges.map(c => ({ ...c, createdBy: '', createdAt: 0 }))
+  const seedChallenges = seedData.challenges.map(c => ({ ...c, createdBy: '', createdAt: 0 })) as ArenaChallengeInput[]
   const [challenges, setChallenges] = useState<ArenaChallenge[]>(seedChallenges as ArenaChallenge[])
   const [filter, setFilter] = useState('all')
   const [active, setActive] = useState<ArenaChallenge | null>(null)
