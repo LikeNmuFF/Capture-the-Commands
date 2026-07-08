@@ -1,0 +1,395 @@
+{
+  "id": 2,
+  "name": "Yellow Belt",
+  "belt": "yellow",
+  "focus": "Files & Text — echo, >, >>, cp, mv, rm, head, tail",
+  "units": [
+    {
+      "id": "t2u1",
+      "tierId": 2,
+      "title": "Echo & Redirect",
+      "commands": ["echo", ">", ">>"],
+      "missionSteps": [
+        {
+          "instruction": "Use `echo` to print 'Hello Bash!' to the terminal.",
+          "hint": "Type `echo Hello Bash!` and press Enter.",
+          "objectives": [
+            { "type": "command_used", "command": "echo", "description": "Use echo to print text" }
+          ]
+        },
+        {
+          "instruction": "Redirect 'Hello Bash!' into a file called 'hello.txt' using `>`.",
+          "hint": "Type `echo \"Hello Bash!\" > hello.txt`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/hello.txt", "description": "Create hello.txt" },
+            { "type": "file_contains", "path": "/home/user/hello.txt", "content": "Hello Bash!", "description": "hello.txt contains 'Hello Bash!'" }
+          ]
+        },
+        {
+          "instruction": "Append a second line 'This is bash bootcamp' to hello.txt using `>>`.",
+          "hint": "Use `>>` instead of `>` to append: `echo \"This is bash bootcamp\" >> hello.txt`",
+          "objectives": [
+            { "type": "file_contains", "path": "/home/user/hello.txt", "content": "This is bash bootcamp", "description": "Second line was appended" }
+          ]
+        },
+        {
+          "instruction": "Use `cat` to verify hello.txt has two lines.",
+          "hint": "Type `cat hello.txt` and check you see both lines.",
+          "objectives": [
+            { "type": "command_used", "command": "cat", "description": "Read hello.txt with cat" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What's the difference between `>` and `>>`?",
+          "options": ["> overwrites, >> appends", "> appends, >> overwrites", "They do the same thing", "> works with echo only"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What does `echo` do without any redirection?",
+          "options": ["Creates a file", "Prints text to terminal", "Deletes text", "Reads from a file"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What would `echo line1 > file.txt && echo line2 > file.txt` leave in file.txt?",
+          "options": ["line1\\nline2", "line1", "line2", "Nothing"],
+          "correctIndex": 2
+        }
+      ],
+      "challenge": {
+        "brief": "Create a file called 'journal.txt' in your home directory with the following content using echo and redirection:\n\n```\nDay 1: Started bash bootcamp\nDay 2: Learned about files\nDay 3: Everything is awesome!\n```\n\nUse `cat` to verify. The flag is hidden in one of the lines — can you spot it?",
+        "hint": "Use `echo` with `>` for the first line, then `>>` to append the rest.",
+        "flag": "flag{3ch0_3xp3rt}"
+      }
+    },
+    {
+      "id": "t2u2",
+      "tierId": 2,
+      "title": "Copy & Move",
+      "commands": ["cp", "mv"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'original.txt' in your home directory with the content 'Back me up!'.",
+          "hint": "Use `echo \"Back me up!\" > original.txt`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/original.txt", "description": "Create original.txt" }
+          ]
+        },
+        {
+          "instruction": "Copy 'original.txt' to 'backup.txt' using `cp`.",
+          "hint": "Type `cp original.txt backup.txt`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/backup.txt", "description": "Create backup.txt via cp" }
+          ]
+        },
+        {
+          "instruction": "Create a 'backups' directory and move 'backup.txt' into it using `mv`.",
+          "hint": "First `mkdir backups`, then `mv backup.txt backups/`",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/backups", "description": "Create backups directory" },
+            { "type": "file_exists", "path": "/home/user/backups/backup.txt", "description": "Move backup.txt into backups/" },
+            { "type": "file_not_exists", "path": "/home/user/backup.txt", "description": "Original location no longer has backup.txt" }
+          ]
+        },
+        {
+          "instruction": "Rename 'original.txt' to 'draft.txt' using `mv`.",
+          "hint": "Type `mv original.txt draft.txt` — moving a file to a new name renames it.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/draft.txt", "description": "Rename to draft.txt" },
+            { "type": "file_not_exists", "path": "/home/user/original.txt", "description": "original.txt no longer exists" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Which command copies a file?",
+          "options": ["mv", "cp", "copy", "clone"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `mv file.txt dir/` do?",
+          "options": ["Copies file.txt into dir/", "Moves file.txt into dir/", "Deletes file.txt", "Renames dir/"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do you rename a file from a.txt to b.txt?",
+          "options": ["cp a.txt b.txt", "mv a.txt b.txt", "rename a.txt b.txt", "Both cp and mv work"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What happens if you cp to a destination that doesn't exist?",
+          "options": ["It creates the destination", "It errors", "It creates a temp file", "It copies anyway"],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "brief": "Someone scattered flag pieces across your home directory!\n\n1. Create a file called 'piece1.txt' with content 'flag{'\n2. Create 'piece2.txt' with content 'cp_4nd_'\n3. Create 'piece3.txt' with content 'mv_ftw}'\n4. Create a 'puzzle' directory\n5. Move all three pieces into 'puzzle'\n6. Use `cat` to read all three files in order to reveal the flag\n\nThe flag is the concatenation of all three pieces.",
+        "hint": "Use `cat piece1.txt piece2.txt piece3.txt` to read them in order.",
+        "flag": "flag{cp_4nd_mv_ftw}"
+      }
+    },
+    {
+      "id": "t2u3",
+      "tierId": 2,
+      "title": "Cleanup",
+      "commands": ["rm"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'junk.txt' in your home directory.",
+          "hint": "Use `touch junk.txt` or `echo anything > junk.txt`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/junk.txt", "description": "Create junk.txt" }
+          ]
+        },
+        {
+          "instruction": "Remove 'junk.txt' using `rm`.",
+          "hint": "Type `rm junk.txt` and press Enter. Use `ls` to confirm it's gone.",
+          "objectives": [
+            { "type": "file_not_exists", "path": "/home/user/junk.txt", "description": "Remove junk.txt with rm" }
+          ]
+        },
+        {
+          "instruction": "Create a directory called 'trash' with a file 'note.txt' inside it.",
+          "hint": "`mkdir trash` then `touch trash/note.txt`",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/trash", "description": "Create trash directory" },
+            { "type": "file_exists", "path": "/home/user/trash/note.txt", "description": "Create note.txt inside trash" }
+          ]
+        },
+        {
+          "instruction": "Remove the 'trash' directory and everything inside it using `rm -r`.",
+          "hint": "`rm -r trash` will remove the directory and all its contents.",
+          "objectives": [
+            { "type": "dir_not_exists", "path": "/home/user/trash", "description": "Remove trash directory recursively" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `rm` do?",
+          "options": ["Renames files", "Removes files", "Reads files", "Moves files"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What flag is needed to remove a directory with rm?",
+          "options": ["-f", "-d", "-r", "-a"],
+          "correctIndex": 2
+        },
+        {
+          "question": "What does `rm -f` do?",
+          "options": ["Force remove — no prompts", "Remove files only", "Fast remove", "Remove folders"],
+          "correctIndex": 0
+        },
+        {
+          "question": "Can you recover a file deleted with rm?",
+          "options": ["Yes, from trash", "No, it's permanently gone", "Only with -r flag", "Only within 30 seconds"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "Your Downloads folder (mocked as /home/user/Downloads) is a mess! Clean it up:\n\n1. `cd` into the Downloads directory\n2. List its contents to see what's there\n3. Remove ALL files that contain 'junk' in their name\n4. Remove the 'old_project' directory recursively\n5. Create a 'keep_me.txt' file with the flag inside: `flag{rm_1s_f0r3v3r}`\n\nProve the directory is clean by listing it with `ls`.",
+        "hint": "Use `rm` with the right filenames. Check each step with `ls`.",
+        "flag": "flag{rm_1s_f0r3v3r}"
+      }
+    },
+    {
+      "id": "t2u4",
+      "tierId": 2,
+      "title": "Viewing Files",
+      "commands": ["head", "tail"],
+      "missionSteps": [
+        {
+          "instruction": "First, let's create a log file with multiple lines. Run:\n`for i in $(seq 1 20); do echo \"Line $i\" >> log.txt; done`\n\n(This creates 20 lines in log.txt)",
+          "hint": "Just run the command exactly as shown. Wait for it to complete.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/log.txt", "description": "Create log.txt with 20 lines" }
+          ]
+        },
+        {
+          "instruction": "Use `head` to view just the first 5 lines of log.txt.",
+          "hint": "Type `head -n 5 log.txt`",
+          "objectives": [
+            { "type": "command_used", "command": "head", "description": "Use head to view first 5 lines" }
+          ]
+        },
+        {
+          "instruction": "Use `tail` to view the last 3 lines of log.txt.",
+          "hint": "Type `tail -n 3 log.txt`",
+          "objectives": [
+            { "type": "command_used", "command": "tail", "description": "Use tail to view last 3 lines" }
+          ]
+        },
+        {
+          "instruction": "Write the first 3 lines of log.txt to 'start.txt' using head and redirection.",
+          "hint": "`head -n 3 log.txt > start.txt`",
+          "objectives": [
+            { "type": "file_contains", "path": "/home/user/start.txt", "content": "Line 1", "description": "Create start.txt with first 3 lines" }
+          ]
+        },
+        {
+          "instruction": "Write the last 2 lines of log.txt to 'end.txt' using tail and redirection.",
+          "hint": "`tail -n 2 log.txt > end.txt`",
+          "objectives": [
+            { "type": "file_contains", "path": "/home/user/end.txt", "content": "Line 19", "description": "Create end.txt with last 2 lines" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `head -n 10 file.txt` do?",
+          "options": ["Shows last 10 lines", "Shows first 10 lines", "Shows 10 characters", "Shows line 10"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `tail -f` do?",
+          "options": ["Shows file at the end", "Follows a file as it grows", "Shows first lines", "Formats the file"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What's the default number of lines for head and tail?",
+          "options": ["5", "10", "20", "50"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "A 100-line file called 'secret_log.txt' exists in your home directory. The flag is hidden on the 42nd line.\n\nUse `head` and `tail` together (with pipes or redirection) to read only line 42.\n\nHint: `head -n 42 file.txt | tail -n 1`",
+        "hint": "Chain head and tail with a pipe (|): `head -n 42 secret_log.txt | tail -n 1`",
+        "flag": "flag{h34d_t41l_ch41n}"
+      }
+    },
+    {
+      "id": "t2u5",
+      "tierId": 2,
+      "title": "Text Manipulator",
+      "commands": ["echo", ">>", "cat"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'server.conf' and write the first config line: `echo \"PORT=8080\" > server.conf`",
+          "hint": "Use `echo \"PORT=8080\" > server.conf` to create the file with the first line.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/server.conf", "description": "Create server.conf" },
+            { "type": "file_contains", "path": "/home/user/server.conf", "content": "PORT=8080", "description": "server.conf contains PORT=8080" }
+          ]
+        },
+        {
+          "instruction": "Append a second line: `echo \"HOST=localhost\" >> server.conf`",
+          "hint": "Use `>>` to append without overwriting.",
+          "objectives": [
+            { "type": "file_contains", "path": "/home/user/server.conf", "content": "HOST=localhost", "description": "Append HOST=localhost" }
+          ]
+        },
+        {
+          "instruction": "Append three more lines:\n```\necho \"DEBUG=true\" >> server.conf\necho \"LOG_LEVEL=info\" >> server.conf\necho \"MAX_CONNECTIONS=100\" >> server.conf\n```",
+          "hint": "Run each echo with >> to append one line at a time.",
+          "objectives": [
+            { "type": "file_contains", "path": "/home/user/server.conf", "content": "DEBUG=true", "description": "Append DEBUG=true" },
+            { "type": "file_contains", "path": "/home/user/server.conf", "content": "MAX_CONNECTIONS=100", "description": "Append MAX_CONNECTIONS=100" }
+          ]
+        },
+        {
+          "instruction": "Verify the file has 5 lines using `cat` and `wc -l`.",
+          "hint": "`cat server.conf` to see all lines. `wc -l server.conf` to count lines.",
+          "objectives": [
+            { "type": "command_used", "command": "cat", "description": "Read server.conf with cat" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `>>` do?",
+          "options": ["Overwrites a file", "Appends to a file", "Creates a directory", "Reads a file"],
+          "correctIndex": 1
+        },
+        {
+          "question": "If you use `>` twice on the same file, what happens?",
+          "options": ["Both lines appear", "Only the second line remains", "It errors", "It appends"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do you write multiple lines to a file efficiently?",
+          "options": ["One echo with \\n", "Multiple echo >> commands", "cat with redirection", "All of the above"],
+          "correctIndex": 3
+        }
+      ],
+      "challenge": {
+        "brief": "A program needs a config file called 'app.config' with exactly this content:\n\n```\n# App Configuration\nNAME=MyApp\nVERSION=2.0\nENABLED=true\nRETRIES=3\n# End of config\n```\n\nBuild it line by line using echo and redirection. Lines starting with # are comments.\n\nOnce created, verify with `cat app.config`.",
+        "hint": "Use `echo \"# App Configuration\" > app.config` for the first line, then `>>` for each subsequent line.",
+        "flag": "flag{t3xt_cr4ft3r}"
+      }
+    },
+    {
+      "id": "t2u6",
+      "tierId": 2,
+      "title": "File Manager",
+      "commands": ["cp", "mv", "rm", "mkdir"],
+      "missionSteps": [
+        {
+          "instruction": "Create a directory called 'work' with subdirectories 'docs', 'scripts', and 'archived'.",
+          "hint": "Use `mkdir -p work/docs work/scripts work/archived` to create all at once.",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/work/docs", "description": "Create work/docs" },
+            { "type": "dir_exists", "path": "/home/user/work/scripts", "description": "Create work/scripts" },
+            { "type": "dir_exists", "path": "/home/user/work/archived", "description": "Create work/archived" }
+          ]
+        },
+        {
+          "instruction": "Create 'readme.md' in the docs folder and write '# Documentation' into it.",
+          "hint": "`touch work/docs/readme.md` then `echo '# Documentation' > work/docs/readme.md`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/work/docs/readme.md", "description": "Create readme.md in docs" }
+          ]
+        },
+        {
+          "instruction": "Copy 'readme.md' to the scripts folder: `cp work/docs/readme.md work/scripts/`",
+          "hint": "The destination is a directory, so the file keeps its name.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/work/scripts/readme.md", "description": "Copy readme.md to scripts/" }
+          ]
+        },
+        {
+          "instruction": "Move the copy in scripts to 'archived' and rename it to 'readme.md.bak' in one command: `mv work/scripts/readme.md work/archived/readme.md.bak`",
+          "hint": "`mv` can move and rename at the same time.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/work/archived/readme.md.bak", "description": "Move and rename to archived" },
+            { "type": "file_not_exists", "path": "/home/user/work/scripts/readme.md", "description": "Original copy no longer in scripts" }
+          ]
+        },
+        {
+          "instruction": "Clean up: remove the empty 'scripts' directory with `rmdir` or `rm -r`.",
+          "hint": "`rmdir work/scripts` removes empty directories, or `rm -r work/scripts` for non-empty ones.",
+          "objectives": [
+            { "type": "dir_not_exists", "path": "/home/user/work/scripts", "description": "Remove the scripts directory" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `cp file.txt dir/` do?",
+          "options": ["Moves file.txt to dir/", "Copies file.txt into dir/", "Renames file.txt", "Deletes file.txt"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do you rename a file?",
+          "options": ["cp old new && rm old", "mv old new", "rename old new", "Both cp and mv work"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `rmdir` do that `rm -r` doesn't?",
+          "options": ["Removes files too", "Only removes empty directories", "Is faster", "Shows confirmation"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What happens if you cp to a directory that doesn't exist?",
+          "options": ["It creates it", "It errors", "It creates a file with that name", "It skips silently"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "The Downloads folder is a mess! Clean it up:\n\n1. Create these directories: 'images', 'documents', 'videos'\n2. Move all .jpg files to 'images'\n3. Move all .pdf files to 'documents'\n4. Move all .mp4 files to 'videos'\n5. Delete any leftover .tmp files\n\nUse `ls` to see what's in Downloads first. Files are named like: photo.jpg, report.pdf, video.mp4, temp.tmp, etc.\n\nAfter organizing, list the final structure with `ls -R Downloads`.",
+        "hint": "Create the dirs, then `mv Downloads/*.jpg Downloads/images/` etc. Then `rm Downloads/*.tmp`.",
+        "flag": "flag{0rg4n1z3d_4nd_cl34n}"
+      }
+    }
+  ]
+}

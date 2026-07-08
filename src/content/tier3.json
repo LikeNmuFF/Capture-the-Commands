@@ -1,0 +1,351 @@
+{
+  "id": 3,
+  "name": "Orange Belt",
+  "belt": "orange",
+  "focus": "Search & Pipes — grep, find, wc, sort, |",
+  "units": [
+    {
+      "id": "t3u1",
+      "tierId": 3,
+      "title": "Finding Needles",
+      "commands": ["grep"],
+      "missionSteps": [
+        {
+          "instruction": "First, create a log file with sample data: run `echo \"error: disk full\\nwarning: low memory\\ninfo: system ready\\nerror: connection timeout\\ninfo: update complete\" > system.log`",
+          "hint": "Use echo with the -e flag or type the full string: `echo -e \"error: disk full\\nwarning: low memory\\ninfo: system ready\\nerror: connection timeout\\ninfo: update complete\" > system.log`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/system.log", "description": "Create system.log with log entries" }
+          ]
+        },
+        {
+          "instruction": "Use `grep` to find all lines containing 'error' in system.log.",
+          "hint": "Type `grep error system.log` — it will print every line that contains 'error'.",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Use grep to search for 'error'" }
+          ]
+        },
+        {
+          "instruction": "Use `grep -c` to count how many lines contain 'info' in system.log.",
+          "hint": "`grep -c info system.log` prints just the count of matching lines.",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Use grep -c to count 'info' lines" }
+          ]
+        },
+        {
+          "instruction": "Use `grep -i` to search for 'ERROR' case-insensitively.",
+          "hint": "`grep -i ERROR system.log` matches 'error', 'Error', 'ERROR', etc.",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Use grep -i for case-insensitive search" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `grep pattern file.txt` do?",
+          "options": ["Deletes lines matching pattern", "Searches for pattern in file", "Replaces pattern in file", "Counts lines in file"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What flag counts matching lines with grep?",
+          "options": ["-n", "-c", "-v", "-l"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `grep -i` do?",
+          "options": ["Invert match", "Case-insensitive search", "Show line numbers", "Search recursively"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `grep -v` do?",
+          "options": ["Show version", "Invert match (show non-matching lines)", "Verbose output", "Show hidden files"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "A file called 'access.log' has been created with 50 log entries. Somewhere in that file, a line contains the word 'FLAG' followed by the flag.\n\nUse `grep` to find it.\n\nHint: The flag is on a line that contains 'FLAG' — case might be tricky.",
+        "hint": "Try `grep -i flag access.log` to search case-insensitively.",
+        "flag": "flag{gr3p_1s_y0ur_fr13nd}"
+      }
+    },
+    {
+      "id": "t3u2",
+      "tierId": 3,
+      "title": "Finding Files",
+      "commands": ["find"],
+      "missionSteps": [
+        {
+          "instruction": "Use `find` to list every file and directory under your home directory.",
+          "hint": "`find /home/user` will recursively print everything under that path.",
+          "objectives": [
+            { "type": "command_used", "command": "find", "description": "Run find on home directory" }
+          ]
+        },
+        {
+          "instruction": "Create a practice structure: `mkdir -p deep/hidden/trove` then `touch deep/hidden/trove/secret.txt`",
+          "hint": "`mkdir -p` creates parent directories automatically.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/deep/hidden/trove/secret.txt", "description": "Create deep hidden file structure" }
+          ]
+        },
+        {
+          "instruction": "Use `find -name` to search for the file 'secret.txt' under your home directory.",
+          "hint": "`find /home/user -name secret.txt` will show the full path.",
+          "objectives": [
+            { "type": "command_used", "command": "find", "description": "Use find -name to locate secret.txt" }
+          ]
+        },
+        {
+          "instruction": "Use `find -name` with a wildcard to find all .txt files in the 'deep' directory.",
+          "hint": "`find /home/user/deep -name \"*.txt\"` finds all files ending in .txt.",
+          "objectives": [
+            { "type": "command_used", "command": "find", "description": "Use find with wildcard to find .txt files" }
+          ]
+        },
+        {
+          "instruction": "Use `find -type d` to find only directories (type d) under your home.",
+          "hint": "`find /home/user -type d` shows only directories, not files.",
+          "objectives": [
+            { "type": "command_used", "command": "find", "description": "Use find -type d to find directories" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `find /path -name \"*.txt\"` do?",
+          "options": ["Finds all .txt files under /path", "Creates .txt files", "Deletes .txt files", "Renames .txt files"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What flag with find searches by file type?",
+          "options": ["-name", "-type", "-size", "-mtime"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `-type d` find?",
+          "options": ["Files", "Directories", "Symlinks", "Devices"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `-type f` find?",
+          "options": ["Regular files", "Directories", "FIFO pipes", "All types"],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "brief": "A flag file named 'flag.txt' is hidden somewhere deep under /home/user in a directory structure.\n\nUse `find` to locate it, then use `cat` to read it.\n\nThe directory has thousands of empty files to slow you down — don't search manually!",
+        "hint": "`find /home/user -name flag.txt` will find it instantly.",
+        "flag": "flag{f1nd_4nd_y3_sh4ll_r3c31v3}"
+      }
+    },
+    {
+      "id": "t3u3",
+      "tierId": 3,
+      "title": "Counting Things",
+      "commands": ["wc"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'poem.txt' with these three lines:\n```\necho \"Roses are red\" > poem.txt\necho \"Violets are blue\" >> poem.txt\necho \"Bash is awesome\" >> poem.txt\n```",
+          "hint": "Use `echo` with `>` for the first line and `>>` for the rest.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/poem.txt", "description": "Create poem.txt with 3 lines" }
+          ]
+        },
+        {
+          "instruction": "Use `wc -l` to count how many lines are in poem.txt.",
+          "hint": "`wc -l poem.txt` prints the line count.",
+          "objectives": [
+            { "type": "command_used", "command": "wc", "description": "Count lines with wc -l" }
+          ]
+        },
+        {
+          "instruction": "Use `wc -w` to count the total words in poem.txt.",
+          "hint": "`wc -w poem.txt` counts all whitespace-separated words.",
+          "objectives": [
+            { "type": "command_used", "command": "wc", "description": "Count words with wc -w" }
+          ]
+        },
+        {
+          "instruction": "Use `wc -c` to count the total characters (bytes) in poem.txt.",
+          "hint": "`wc -c poem.txt` counts every character including newlines.",
+          "objectives": [
+            { "type": "command_used", "command": "wc", "description": "Count characters with wc -c" }
+          ]
+        },
+        {
+          "instruction": "Run `wc` with no flags to see lines, words, and characters all at once.",
+          "hint": "Just `wc poem.txt` shows all three counts: lines, words, characters.",
+          "objectives": [
+            { "type": "command_used", "command": "wc", "description": "Run wc with no flags" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `wc -l` count?",
+          "options": ["Characters", "Words", "Lines", "Bytes"],
+          "correctIndex": 2
+        },
+        {
+          "question": "What does `wc -w` count?",
+          "options": ["Lines", "Characters", "Words", "Files"],
+          "correctIndex": 2
+        },
+        {
+          "question": "What happens if you run `wc` without any flags?",
+          "options": ["Errors", "Shows all three: lines, words, chars", "Shows only lines", "Counts files"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which flag counts bytes with wc?",
+          "options": ["-b", "-c", "-y", "-m"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "There's a file called 'data.txt' in your home directory. It contains the flag, but it's buried among thousands of numbers.\n\nUse `wc` to figure out how many lines the file has, then use `grep` or `tail` to extract the line that doesn't look like a number.\n\nThe flag line contains the word 'flag'.",
+        "hint": "Find the total line count with `wc -l data.txt`. Then use `grep flag data.txt` to find the flag line directly.",
+        "flag": "flag{c0unt_0n_y0urs3lf}"
+      }
+    },
+    {
+      "id": "t3u4",
+      "tierId": 3,
+      "title": "Sorting It Out",
+      "commands": ["sort", "uniq"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'names.txt' with these names (one per line):\n```\necho \"Zara\" > names.txt\necho \"Alice\" >> names.txt\necho \"Bob\" >> names.txt\necho \"Zara\" >> names.txt\necho \"Charlie\" >> names.txt\necho \"Bob\" >> names.txt\n```",
+          "hint": "Use `echo` with `>>` to append each name.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/names.txt", "description": "Create names.txt with 6 lines" }
+          ]
+        },
+        {
+          "instruction": "Use `sort` to display the names in alphabetical order.",
+          "hint": "`sort names.txt` prints the sorted list without changing the file.",
+          "objectives": [
+            { "type": "command_used", "command": "sort", "description": "Sort names alphabetically" }
+          ]
+        },
+        {
+          "instruction": "Use `sort -r` to reverse the alphabetical order.",
+          "hint": "`sort -r names.txt` sorts in descending (reverse) order.",
+          "objectives": [
+            { "type": "command_used", "command": "sort", "description": "Sort names in reverse order" }
+          ]
+        },
+        {
+          "instruction": "Use `sort names.txt | uniq` to see only unique names (remove duplicates).",
+          "hint": "The pipe `|` sends sorted output to `uniq`, which removes adjacent duplicates.",
+          "objectives": [
+            { "type": "command_used", "command": "sort", "description": "Use sort piped to uniq for unique names" }
+          ]
+        },
+        {
+          "instruction": "Use `sort names.txt | uniq -c` to count how many times each name appears.",
+          "hint": "`uniq -c` prefixes each line with its count.",
+          "objectives": [
+            { "type": "command_used", "command": "sort", "description": "Count occurrences with sort | uniq -c" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `sort` do by default?",
+          "options": ["Reverses order", "Sorts alphabetically (ascending)", "Shuffles randomly", "Removes duplicates"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `sort -r` do?",
+          "options": ["Random sort", "Reverse (descending) sort", "Remove duplicates", "Reverse each line"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `uniq` do?",
+          "options": ["Makes lines unique", "Removes adjacent duplicate lines", "Sorts the file", "Counts lines"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why do you typically `sort` before `uniq`?",
+          "options": ["uniq requires sorted input to work", "It's faster that way", "Sort is optional", "uniq only removes adjacent duplicates"],
+          "correctIndex": 3
+        }
+      ],
+      "challenge": {
+        "brief": "A file called 'survey.txt' contains survey responses — one response per line, with many duplicates.\n\nFind the flag by:\n1. Sorting the file\n2. Finding the unique lines (duplicates removed)\n3. One of the unique lines contains the flag\n\nUse: `sort survey.txt | uniq` to see only unique responses.",
+        "hint": "Pipe sort into uniq to clean up the data, then look for the line that stands out.",
+        "flag": "flag{s0rt3d_uniq_f1lt3r}"
+      }
+    },
+    {
+      "id": "t3u5",
+      "tierId": 3,
+      "title": "Pipes & Chains",
+      "commands": ["|", "grep", "wc", "sort", "head", "tail"],
+      "missionSteps": [
+        {
+          "instruction": "Create a file called 'survey_results.txt' with 20 lines of data:\n```\necho \"user1: yes\" > survey_results.txt\nfor i in $(seq 2 20); do\n  if [ $((i % 3)) -eq 0 ]; then\n    echo \"user$i: no\" >> survey_results.txt\n  elif [ $((i % 3)) -eq 1 ]; then\n    echo \"user$i: yes\" >> survey_results.txt\n  else\n    echo \"user$i: maybe\" >> survey_results.txt\n  fi\ndone\n```\n\n(If the for loop doesn't work, just create the file manually with 20 lines)",
+          "hint": "Type each echo command separately if the loop doesn't work in your environment.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/survey_results.txt", "description": "Create survey_results.txt with 20 lines" }
+          ]
+        },
+        {
+          "instruction": "Use `grep yes survey_results.txt | wc -l` to count how many people said 'yes'.",
+          "hint": "The pipe sends grep's output to wc for counting. One command, two tools!",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Chain grep with wc using pipe" }
+          ]
+        },
+        {
+          "instruction": "Use `grep no survey_results.txt | sort` to find all 'no' responses and sort them.",
+          "hint": "Chain: grep filters → sort orders the result.",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Chain grep with sort using pipe" }
+          ]
+        },
+        {
+          "instruction": "Use `grep maybe survey_results.txt | wc -l` to count the 'maybe' responses.",
+          "hint": "Same pattern: grep filters for 'maybe' → wc counts the lines.",
+          "objectives": [
+            { "type": "command_used", "command": "grep", "description": "Count 'maybe' responses with grep | wc" }
+          ]
+        },
+        {
+          "instruction": "Use `cat survey_results.txt | grep yes | wc -l` — a 3-command chain that reads, filters, and counts.",
+          "hint": "Each pipe passes the output of one command as input to the next: cat → grep → wc.",
+          "objectives": [
+            { "type": "command_used", "command": "cat", "description": "Build a 3-command pipe chain" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does the `|` (pipe) operator do?",
+          "options": ["Redirects to a file", "Passes stdout to next command's stdin", "Runs commands in parallel", "Creates a named pipe"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `grep error log.txt | wc -l` do?",
+          "options": ["Shows errors with line numbers", "Counts error lines in log.txt", "Lists errors with line count", "Deletes error lines"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How many pipes are in: `cat f.txt | grep x | sort | uniq -c`?",
+          "options": ["2", "3", "4", "1"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `sort data.txt | uniq -c | sort -r` do?",
+          "options": ["Counts duplicates and shows rarest first", "Counts duplicates and shows most common first", "Removes all duplicates", "Errors"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "A file called 'puzzle.log' has been created. It contains 100 lines of random data. Somewhere in it, a flag is hidden on a line that:\n- Contains the word 'secret'\n- Is not a duplicate (appears only once)\n\nFind it using pipes! The full solution is:\n```\ngrep secret puzzle.log | sort | uniq -c | sort -r | head -n 1\n```\n\nOr simply: `grep secret puzzle.log | uniq`",
+        "hint": "Use `grep secret puzzle.log` to find the secret lines, then pipe to `uniq` to remove duplicates.",
+        "flag": "flag{p1p3s_m4k3_p0w3r}"
+      }
+    }
+  ]
+}

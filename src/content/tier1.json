@@ -1,0 +1,337 @@
+{
+  "id": 1,
+  "name": "White Belt",
+  "belt": "white",
+  "focus": "Navigation — pwd, ls, cd, mkdir, touch, cat",
+  "units": [
+    {
+      "id": "t1u1",
+      "tierId": 1,
+      "title": "Where Am I?",
+      "commands": ["pwd", "ls", "cd"],
+      "missionSteps": [
+        {
+          "instruction": "Use `pwd` to see which directory you're in.",
+          "hint": "Type `pwd` and press Enter.",
+          "objectives": [
+            { "type": "command_used", "command": "pwd", "description": "Run the pwd command" }
+          ]
+        },
+        {
+          "instruction": "Use `ls` to list the files in your home directory.",
+          "hint": "Type `ls` and press Enter. You should see some files and folders.",
+          "objectives": [
+            { "type": "command_used", "command": "ls", "description": "Run the ls command" }
+          ]
+        },
+        {
+          "instruction": "Use `ls -a` to see ALL files, including hidden ones (starting with .).",
+          "hint": "Type `ls -a` and press Enter. Hidden files start with a dot.",
+          "objectives": [
+            { "type": "command_used", "command": "ls", "description": "Run ls with the -a flag" }
+          ]
+        },
+        {
+          "instruction": "Navigate into the 'Documents' directory using `cd`.",
+          "hint": "Type `cd Documents` and press Enter. Then use `pwd` to confirm you're there.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user/Documents", "description": "Change to the Documents directory" }
+          ]
+        },
+        {
+          "instruction": "Go back to your home directory with `cd ~` or `cd`.",
+          "hint": "Typing `cd` with no arguments takes you home. Or try `cd ~`.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user", "description": "Return to your home directory" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `pwd` stand for?",
+          "options": ["print working directory", "password", "previous working directory", "process work daemon"],
+          "correctIndex": 0
+        },
+        {
+          "question": "Which command lists files and directories?",
+          "options": ["cd", "ls", "pwd", "cat"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do you go up one directory level?",
+          "options": ["cd ..", "cd .", "cd ~", "cd /"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What flag shows hidden files with ls?",
+          "options": ["-h", "-a", "-l", "-r"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "Someone hid a flag somewhere in the /home/user directory. Use `ls`, `cd`, and `cat` to explore the file system and find it.\n\nThe flag format is flag{...}.\n\nHint: Check every directory, including hidden ones.",
+        "hint": "Try `ls -a` in each directory. Look for files that seem out of place.",
+        "flag": "flag{n1c3_n4v1g4t10n}"
+      }
+    },
+    {
+      "id": "t1u2",
+      "tierId": 1,
+      "title": "Making Things",
+      "commands": ["mkdir", "touch"],
+      "missionSteps": [
+        {
+          "instruction": "Create a directory called 'practice' in your home folder using `mkdir`.",
+          "hint": "Type `mkdir practice` while in your home directory.",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/practice", "description": "Create the practice directory" }
+          ]
+        },
+        {
+          "instruction": "Navigate into 'practice' and create a file called 'notes.txt' using `touch`.",
+          "hint": "First `cd practice`, then `touch notes.txt`.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/practice/notes.txt", "description": "Create notes.txt in the practice directory" }
+          ]
+        },
+        {
+          "instruction": "Create two more files: 'todo.txt' and 'ideas.txt' in the practice directory.",
+          "hint": "You can create multiple files at once: `touch todo.txt ideas.txt`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/practice/todo.txt", "description": "Create todo.txt" },
+            { "type": "file_exists", "path": "/home/user/practice/ideas.txt", "description": "Create ideas.txt" }
+          ]
+        },
+        {
+          "instruction": "Create a subdirectory inside 'practice' called 'archive' and navigate into it.",
+          "hint": "`mkdir archive` then `cd archive`",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/practice/archive", "description": "Create the archive directory" },
+            { "type": "cwd_is", "path": "/home/user/practice/archive", "description": "Navigate into the archive directory" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Which command creates a new directory?",
+          "options": ["touch", "mkdir", "cd", "ls"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which command creates an empty file?",
+          "options": ["mkdir", "touch", "cat", "echo"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Can you create multiple files with one touch command?",
+          "options": ["Yes", "No"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What happens if you create a directory that already exists?",
+          "options": ["It overwrites it", "It creates a copy", "It shows an error", "Nothing"],
+          "correctIndex": 2
+        }
+      ],
+      "challenge": {
+        "brief": "Create the following directory structure in your home folder:\n\n```\nproject/\n  src/\n    main.sh\n  docs/\n    readme.md\n  tests/\n    test1.sh\n```\n\nUse `mkdir` and `touch` to build it. Then navigate to `project/src/` and confirm with `pwd`.",
+        "hint": "Create 'project' first, then its subdirectories, then the files inside them.",
+        "flag": "flag{m4k3r_0f_th1ngs}"
+      }
+    },
+    {
+      "id": "t1u3",
+      "tierId": 1,
+      "title": "Reading Things",
+      "commands": ["cat"],
+      "missionSteps": [
+        {
+          "instruction": "While in your home directory, use `cat` to read the contents of 'readme.txt'.",
+          "hint": "Type `cat readme.txt` and press Enter.",
+          "objectives": [
+            { "type": "command_used", "command": "cat", "description": "Use cat to read readme.txt" }
+          ]
+        },
+        {
+          "instruction": "Now read 'notes.txt' to see what it says.",
+          "hint": "Type `cat notes.txt` and press Enter.",
+          "objectives": [
+            { "type": "command_used_once", "command": "cat", "description": "Use cat to read notes.txt" }
+          ]
+        },
+        {
+          "instruction": "Let's create a file with content using echo: run `echo \"Hello, World!\" > greeting.txt`",
+          "hint": "This uses output redirection (>) to write text into a new file.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/greeting.txt", "description": "Create greeting.txt" },
+            { "type": "file_contains", "path": "/home/user/greeting.txt", "content": "Hello, World!", "description": "greeting.txt contains 'Hello, World!'" }
+          ]
+        },
+        {
+          "instruction": "Use `cat` to read 'greeting.txt' and verify its contents.",
+          "hint": "Type `cat greeting.txt` — you should see 'Hello, World!' printed.",
+          "objectives": [
+            { "type": "command_used", "command": "cat", "description": "Read greeting.txt with cat" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `cat` do?",
+          "options": ["Lists directory contents", "Shows file contents", "Copies files", "Creates files"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do you write text to a file using echo?",
+          "options": ["echo text file.txt", "echo text > file.txt", "echo file.txt text", "echo > text file.txt"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `>` do in a command?",
+          "options": ["Appends output", "Redirects output to a file (overwrite)", "Pipes to next command", "Reads from a file"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "In your home directory, there's a file called 'mystery.txt'. Create it first using `touch`, then write the following three lines into it using echo and redirection:\n\n```\nThe first secret is hidden\nBeneath the second layer\nThe flag is: flag{c4t_1s_4m4z1ng}\n```\n\nUse `cat` to read it and find the flag.",
+        "hint": "Use `echo` with `>` to write each line, or `>>` to append. Then `cat` to read it.",
+        "flag": "flag{c4t_1s_4m4z1ng}"
+      }
+    },
+    {
+      "id": "t1u4",
+      "tierId": 1,
+      "title": "Path Navigator",
+      "commands": ["cd", "pwd", "ls"],
+      "missionSteps": [
+        {
+          "instruction": "Check your current location with `pwd`. You should be in /home/user.",
+          "hint": "Type `pwd` to print the working directory.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user", "description": "Start in /home/user" }
+          ]
+        },
+        {
+          "instruction": "Navigate into the 'Projects' directory using a relative path.",
+          "hint": "Type `cd Projects` — this is a relative path from your home directory.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user/Projects", "description": "Change to Projects directory" }
+          ]
+        },
+        {
+          "instruction": "Go back to your home directory using `cd ..` (parent directory).",
+          "hint": "`cd ..` moves up one directory level. Then confirm with `pwd`.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user", "description": "Navigate back to /home/user using .." }
+          ]
+        },
+        {
+          "instruction": "Navigate to 'Documents' then to a subdirectory inside it using a single `cd` command with a path like `cd Documents/subdir`.",
+          "hint": "First create the subdir with `mkdir Documents/subdir`, then `cd Documents/subdir`.",
+          "objectives": [
+            { "type": "dir_exists", "path": "/home/user/Documents/subdir", "description": "Create Documents/subdir" },
+            { "type": "cwd_is", "path": "/home/user/Documents/subdir", "description": "Navigate to Documents/subdir" }
+          ]
+        },
+        {
+          "instruction": "Use `cd ~` to jump straight back to your home directory from anywhere.",
+          "hint": "`cd ~` always takes you to your home directory regardless of where you are.",
+          "objectives": [
+            { "type": "cwd_is", "path": "/home/user", "description": "Use cd ~ to return home" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `..` represent in a path?",
+          "options": ["Current directory", "Parent directory", "Home directory", "Root directory"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does `~` expand to?",
+          "options": ["Root directory /", "Current directory", "Home directory /home/user", "Parent directory"],
+          "correctIndex": 2
+        },
+        {
+          "question": "If you're in /home/user/Documents, what does `cd ../Projects` do?",
+          "options": ["Goes to /home/user/Projects", "Goes to /home/Projects", "Goes to Projects inside Documents", "Errors"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What does a relative path start with?",
+          "options": ["/", "~", "a name or .", "-"],
+          "correctIndex": 2
+        }
+      ],
+      "challenge": {
+        "brief": "A hidden file exists somewhere in a maze of directories under /home/user. You start at the root ('/').\n\nUse `cd`, `ls`, and `pwd` to find your way through this maze and locate the flag.\n\nThe directory tree is:\n```\n/maze/\n  room1/\n    room2/\n      room3/\n        .flag\n```\n\nNavigate to /maze/room1/room2/room3/ and use `ls -a` to see the hidden file, then `cat` it.",
+        "hint": "Use `cd /maze/room1/room2/room3`, then `ls -a` to find the hidden .flag file, then `cat .flag`.",
+        "flag": "flag{p4th_tr4v3rs3r}"
+      }
+    },
+    {
+      "id": "t1u5",
+      "tierId": 1,
+      "title": "File Detective",
+      "commands": ["ls", "cat", "cd"],
+      "missionSteps": [
+        {
+          "instruction": "List all files (including hidden) in your home directory with `ls -la`.",
+          "hint": "Type `ls -la` to see detailed listing with hidden files.",
+          "objectives": [
+            { "type": "command_used", "command": "ls", "description": "Use ls -la in home directory" }
+          ]
+        },
+        {
+          "instruction": "Check if there's a file called 'clue1.txt' in your home directory. Create it if not: `touch clue1.txt` then write 'Nothing here yet' into it with `echo`.",
+          "hint": "Use `echo 'Nothing here yet' > clue1.txt`.",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/clue1.txt", "description": "Create clue1.txt" }
+          ]
+        },
+        {
+          "instruction": "Create clue2.txt and clue3.txt in the Documents directory. Use `ls Documents/` to verify.",
+          "hint": "`touch Documents/clue2.txt Documents/clue3.txt` then `ls Documents/`",
+          "objectives": [
+            { "type": "file_exists", "path": "/home/user/Documents/clue2.txt", "description": "Create clue2.txt in Documents" },
+            { "type": "file_exists", "path": "/home/user/Documents/clue3.txt", "description": "Create clue3.txt in Documents" }
+          ]
+        },
+        {
+          "instruction": "Run `ls -R` to recursively list all files in your home directory and see the full picture.",
+          "hint": "`ls -R` recursively shows the contents of all subdirectories.",
+          "objectives": [
+            { "type": "command_used", "command": "ls", "description": "Use ls -R to see all files recursively" }
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does `ls -la` show?",
+          "options": ["Only hidden files", "All files with details", "Only directories", "Just file names"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does the `-R` flag do in ls?",
+          "options": ["Reverse order", "Recursive listing", "Read-only", "Rename"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which command shows you your current location?",
+          "options": ["ls", "cat", "pwd", "cd"],
+          "correctIndex": 2
+        },
+        {
+          "question": "What would `ls Documents/` do?",
+          "options": ["List Documents itself", "List contents of Documents dir", "Create Documents", "Delete Documents"],
+          "correctIndex": 1
+        }
+      ],
+      "challenge": {
+        "brief": "Someone left a flag somewhere in a file under /home/user. The flag is split across two files!\n\nFile A contains the first half: 'flag{'. File B contains the second half: 'f1l3_d3t3ct1v3}'.\n\nYour mission:\n1. Find which two files contain the flag parts\n2. Use `cat` to read them both in order to reveal the full flag\n\nHint: Look in every directory with `ls -R`. The files might be hidden or in subdirectories.",
+        "hint": "Use `ls -laR` to see everything recursively. Look for small files with unusual names. Then `cat fileA fileB` to combine them.",
+        "flag": "flag{f1l3_d3t3ct1v3}"
+      }
+    }
+  ]
+}
