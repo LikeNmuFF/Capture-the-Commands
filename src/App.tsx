@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { onAuthChange, getCurrentUser } from './firebase/auth'
 import { getUserData, updateUserProgress } from './firebase/firestore'
 import { useGameStore } from './store/gameStore'
+import { pageSweep } from './lib/motion'
 import LandingPage from './pages/LandingPage'
 import WelcomePage from './pages/WelcomePage'
 import BootcampPage from './pages/BootcampPage'
@@ -140,17 +142,27 @@ function App() {
         </div>
       )}
 
-      {screen === 'landing' && (
-        <LandingPage
-          onStart={handleGuestStart}
-          onSignIn={handleSignIn}
-          signedIn={!!getCurrentUser()}
-        />
-      )}
-      {screen === 'boot' && (
-        <WelcomePage onStart={handleBootComplete} />
-      )}
-      {screen === 'game' && <BootcampPage />}
+      <AnimatePresence mode="wait">
+        {screen === 'landing' && (
+          <motion.div key="landing" variants={pageSweep} initial="hidden" animate="show" exit="hidden">
+            <LandingPage
+              onStart={handleGuestStart}
+              onSignIn={handleSignIn}
+              signedIn={!!getCurrentUser()}
+            />
+          </motion.div>
+        )}
+        {screen === 'boot' && (
+          <motion.div key="boot" variants={pageSweep} initial="hidden" animate="show" exit="hidden">
+            <WelcomePage onStart={handleBootComplete} />
+          </motion.div>
+        )}
+        {screen === 'game' && (
+          <motion.div key="game" variants={pageSweep} initial="hidden" animate="show" exit="hidden">
+            <BootcampPage />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {showAuth && (
         <AuthModal

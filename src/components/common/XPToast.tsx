@@ -31,11 +31,11 @@ const typeIcons: Record<string, ReactNode> = {
   ),
 }
 
-const typeColors: Record<string, { bg: string; border: string; text: string }> = {
-  xp: { bg: 'rgba(0,255,65,0.15)', border: 'rgba(0,255,65,0.3)', text: 'var(--text-accent)' },
-  levelup: { bg: 'rgba(168,85,247,0.15)', border: 'rgba(168,85,247,0.3)', text: '#c084fc' },
-  belt: { bg: 'rgba(255,176,0,0.15)', border: 'rgba(255,176,0,0.3)', text: '#fbbf24' },
-  quiz: { bg: 'rgba(88,166,255,0.15)', border: 'rgba(88,166,255,0.3)', text: '#60a5fa' },
+const typeColors: Record<string, { bg: string; border: string; text: string; amountText: string; glow?: string }> = {
+  xp: { bg: 'var(--bg-glass)', border: 'var(--border-primary)', text: 'var(--text-primary)', amountText: 'var(--text-accent)' },
+  levelup: { bg: 'var(--bg-glass)', border: 'var(--info)', text: 'var(--text-primary)', amountText: 'var(--info)', glow: '0 0 16px var(--info)' },
+  belt: { bg: 'var(--bg-glass)', border: 'var(--border-primary)', text: 'var(--text-primary)', amountText: 'var(--text-accent)' },
+  quiz: { bg: 'var(--bg-glass)', border: 'var(--border-primary)', text: 'var(--text-primary)', amountText: 'var(--text-accent)' },
 }
 
 export default function XPToast() {
@@ -66,17 +66,20 @@ export default function XPToast() {
         return (
           <div
             key={item.id}
-            className="animate-slide-up px-4 py-2.5 rounded-xl backdrop-blur-xl font-mono text-sm flex items-center gap-2 shadow-lg"
+            className="animate-slide-up px-4 py-2.5 rounded-xl backdrop-blur-xl font-mono text-sm flex items-center gap-2"
             style={{
               backgroundColor: colors.bg,
-              borderColor: colors.border,
-              borderWidth: '1px',
+              border: `1px solid ${colors.border}`,
+              boxShadow: colors.glow || 'var(--shadow-md)',
               color: colors.text,
               animationDelay: `${i * 100}ms`
             }}
           >
-            {typeIcons[item.type] || typeIcons.xp}
+            <span style={{ color: colors.amountText }}>{typeIcons[item.type] || typeIcons.xp}</span>
             <span>{item.message}</span>
+            {item.amount > 0 && (
+              <span className="font-bold ml-1" style={{ color: colors.amountText }}>+{item.amount}</span>
+            )}
           </div>
         )
       })}

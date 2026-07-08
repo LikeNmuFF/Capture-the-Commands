@@ -1,15 +1,18 @@
+import { motion } from 'framer-motion'
 import { useTheme } from '../../contexts/ThemeContext'
 
 export default function ThemeToggle() {
   const { theme, toggleTheme, isDark } = useTheme()
 
   return (
-    <button
+    <motion.button
       onClick={toggleTheme}
       className="relative w-14 h-7 rounded-full transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-offset-2"
       style={{
         backgroundColor: isDark ? 'var(--bg-tertiary)' : 'var(--bg-tertiary)',
       }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
@@ -30,6 +33,6 @@ export default function ThemeToggle() {
           </svg>
         )}
       </div>
-    </button>
+    </motion.button>
   )
 }
