@@ -69,12 +69,7 @@ export default function LandingPage({ onStart, onSignIn, signedIn }: Props) {
         <div className="mx-auto max-w-6xl px-5 py-10 sm:py-14 flex flex-col gap-12">
           {/* Hero */}
           <motion.section variants={fadeUp} className="flex flex-col items-center text-center gap-6">
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ backgroundColor: 'var(--text-accent)', border: '1px solid var(--text-accent)', boxShadow: '0 0 24px var(--text-accent)' }}
-            >
-              <span className="text-3xl font-mono font-bold" style={{ color: '#04140a' }}>&gt;_</span>
-            </div>
+            <img src="/src/logo/logo.svg" alt="Capture the Command" className="w-20 h-20" />
 
             <h1
               className="font-mono font-bold tracking-tight leading-none"
