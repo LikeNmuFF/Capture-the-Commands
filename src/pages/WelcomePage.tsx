@@ -96,7 +96,7 @@ export default function WelcomePage({ onStart }: Props) {
 
   return (
     <div
-      className="h-screen w-screen flex items-center justify-center overflow-hidden crt-overlay relative"
+      className="h-dvh w-dvw flex items-center justify-center overflow-hidden crt-overlay relative"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       <div className="absolute inset-0 bg-grid opacity-[0.15]" aria-hidden />

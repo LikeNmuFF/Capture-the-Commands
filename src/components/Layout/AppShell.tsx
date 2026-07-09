@@ -46,7 +46,7 @@ export default function AppShell({ terminal, quizPanel }: Props) {
     : phase === 'challenge' ? <ChallengePanel /> : <MissionPanel />
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <div className="h-dvh w-dvw flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)' }}>
       {showTutorial && <FirstRunTutorial onDismiss={() => setShowTutorial(false)} />}
       <XPToast />
       <BeltCeremony />

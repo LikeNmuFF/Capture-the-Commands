@@ -54,7 +54,7 @@ export default function LandingPage({ onStart, onSignIn, signedIn }: Props) {
   const visibleLines = terminalScript.slice(0, visibleCount)
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <div className="h-dvh w-dvw overflow-hidden relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
       {/* Grid + neon glow backdrop */}
       <div className="absolute inset-0 bg-grid opacity-[0.15]" aria-hidden />
       <div className="absolute inset-0 bg-radial-glow" aria-hidden />

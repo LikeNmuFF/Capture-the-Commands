@@ -124,7 +124,7 @@ function App() {
 
   if (!authLoaded) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <div className="h-dvh w-dvw flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-2 border-t-transparent rounded-full animate-spin-slow" style={{ borderColor: 'var(--text-accent)', borderTopColor: 'transparent' }} />
           <p className="text-sm font-mono" style={{ color: 'var(--text-secondary)' }}>Loading...</p>
