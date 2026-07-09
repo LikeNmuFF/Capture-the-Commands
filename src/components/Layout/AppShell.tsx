@@ -84,13 +84,13 @@ export default function AppShell({ terminal, quizPanel }: Props) {
         >
           {sidebarExpanded ? (
             <div className="flex items-center gap-2.5 min-w-0">
-              <img src="/src/logo/logo.svg" alt="bash" className="w-7 h-7 shrink-0" />
+              <img src="/logo.svg" alt="bash" className="w-7 h-7 shrink-0" />
               <span className="text-xs font-mono tracking-tight truncate" style={{ color: 'var(--text-accent)' }}>
                 bash-bootcamp
               </span>
             </div>
           ) : (
-            <img src="/src/logo/logo.svg" alt="bash" className="w-6 h-6 shrink-0" />
+            <img src="/logo.svg" alt="bash" className="w-6 h-6 shrink-0" />
           )}
 
           {/* Desktop collapse toggle */}
@@ -173,7 +173,7 @@ export default function AppShell({ terminal, quizPanel }: Props) {
               }}
               title={phase === 'challenge' ? 'Challenge' : 'Mission'}
             >
-              <img src="/src/logo/logo.svg" alt="" className="w-4 h-4" />
+              <img src="/logo.svg" alt="" className="w-4 h-4" />
             </button>
             <button
               onClick={() => { setSidebarTab('leaderboard'); setSidebarExpanded(true) }}

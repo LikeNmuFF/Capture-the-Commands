@@ -147,7 +147,7 @@ export default function WelcomePage({ onStart }: Props) {
           <div className="mt-10 space-y-8 animate-fade-in">
             {/* Logo */}
             <div className="flex justify-center">
-              <img src="/src/logo/logo.svg" alt="Capture the Command" className="w-16 h-16" />
+              <img src="/logo.svg" alt="Capture the Command" className="w-16 h-16" />
             </div>
             {/* Tier preview carousel */}
             <div className="flex flex-col items-center">

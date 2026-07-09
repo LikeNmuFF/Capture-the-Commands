@@ -18,7 +18,7 @@ export default function MobileNav({ activeTab, onTabChange }: Props) {
       id: 'terminal',
       label: 'Terminal',
       icon: (
-        <img src="/src/logo/logo.svg" alt="" className="w-5 h-5" />
+        <img src="/logo.svg" alt="" className="w-5 h-5" />
       ),
     },
     {
