@@ -138,8 +138,8 @@
         }
       ],
       "challenge": {
-        "brief": "Create the following directory structure in your home folder:\n\n```\nproject/\n  src/\n    main.sh\n  docs/\n    readme.md\n  tests/\n    test1.sh\n```\n\nUse `mkdir` and `touch` to build it. Then navigate to `project/src/` and confirm with `pwd`.",
-        "hint": "Create 'project' first, then its subdirectories, then the files inside them.",
+        "brief": "Create the following directory structure in your home folder:\n\n```\nproject/\n  src/\n    main.sh\n  docs/\n    readme.md\n  tests/\n    test1.sh\n```\n\nUse `mkdir` and `touch` to build it. Then `cat project/src/main.sh` to read the project starter — the flag is hidden inside!",
+        "hint": "Create 'project' first, then its subdirectories, then the files inside them. Finally use `cat project/src/main.sh` to find the flag.",
         "flag": "flag{m4k3r_0f_th1ngs}",
         "objectives": [
           { "type": "dir_exists", "path": "/home/user/project", "description": "Create project/ directory" },

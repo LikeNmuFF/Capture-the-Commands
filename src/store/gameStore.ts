@@ -75,6 +75,13 @@ function setupUnitFS(env: Environment, unitId: string) {
       VirtualFS.writeFile(env.fs, flagPath, 'flag{n1c3_n4v1g4t10n}\n')
     }
   }
+  if (unitId === 't1u2') {
+    const mainSh = VirtualFS.resolvePath(env.cwd, 'project/src/main.sh')
+    VirtualFS.mkdir(env.fs, VirtualFS.resolvePath(env.cwd, 'project'))
+    VirtualFS.mkdir(env.fs, VirtualFS.resolvePath(env.cwd, 'project/src'))
+    VirtualFS.touch(env.fs, mainSh)
+    VirtualFS.writeFile(env.fs, mainSh, '#!/bin/bash\necho "flag{m4k3r_0f_th1ngs}"\n')
+  }
   if (unitId === 't2u4') {
     const secretLog = VirtualFS.resolvePath(env.cwd, 'secret_log.txt')
     const node = VirtualFS.getNode(env.fs, VirtualFS.getParentPath(secretLog))
