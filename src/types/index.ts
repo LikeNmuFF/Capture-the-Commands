@@ -49,6 +49,7 @@ export interface Challenge {
   brief: string
   hint: string
   flag: string
+  objectives?: ObjectiveData[]
 }
 
 export interface Unit {

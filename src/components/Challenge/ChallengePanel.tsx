@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
-import FlagInput from './FlagInput'
 import { useTheme } from '../../contexts/ThemeContext'
+import { checkObjective } from '../../utils/objectiveCheckers'
+import { ObjectiveData } from '../../types'
+import FlagInput from './FlagInput'
 import Card from '../ui/Card'
 import Badge from '../ui/Badge'
 
@@ -10,9 +12,23 @@ export default function ChallengePanel() {
   const [showHint, setShowHint] = useState(false)
   const phase = useGameStore(s => s.phase)
   const getCurrentUnit = useGameStore(s => s.getCurrentUnit)
+  const env = useGameStore(s => s.env)
+  const usedCommands = useGameStore(s => s.usedCommands)
   const { isDark } = useTheme()
 
   const unit = getCurrentUnit()
+
+  const challengeObjectives = unit?.challenge.objectives || []
+
+  const objectiveStatuses = useMemo(() => {
+    return challengeObjectives.map(obj => ({
+      description: obj.description,
+      done: checkObjective(obj as ObjectiveData, env, usedCommands),
+    }))
+  }, [challengeObjectives, env, usedCommands])
+
+  const allMet = objectiveStatuses.length > 0 && objectiveStatuses.every(o => o.done)
+  const doneCount = objectiveStatuses.filter(o => o.done).length
 
   if (phase !== 'challenge' || !unit) return null
 
@@ -37,7 +53,7 @@ export default function ChallengePanel() {
             {unit.title}
           </h3>
           <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--warning)', opacity: 0.7 }}>
-            Find the flag to complete this unit
+            Complete the objectives and find the flag
           </p>
         </div>
 
@@ -65,6 +81,87 @@ export default function ChallengePanel() {
             </p>
           </div>
         </div>
+
+        {/* Objectives checklist */}
+        {objectiveStatuses.length > 0 && (
+          <div className="px-4 pt-3 pb-0">
+            <div
+              className="rounded-lg p-3"
+              style={{
+                backgroundColor: isDark ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.02)',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
+                  Progress
+                </span>
+                <span className="text-[10px] font-mono" style={{ color: 'var(--text-tertiary)' }}>
+                  {doneCount}/{objectiveStatuses.length}
+                </span>
+              </div>
+              <div className="w-full h-1 rounded-full mb-2 overflow-hidden" style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }}>
+                <div
+                  className="h-full rounded-full transition-all duration-700 ease-out"
+                  style={{
+                    width: `${(doneCount / Math.max(objectiveStatuses.length, 1)) * 100}%`,
+                    background: 'linear-gradient(90deg, var(--warning), #ff8c00)',
+                  }}
+                />
+              </div>
+              <div className="space-y-1">
+                {objectiveStatuses.map((obj, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-2 p-1.5 rounded transition-all duration-300"
+                    style={{
+                      backgroundColor: obj.done ? (isDark ? 'rgba(255,176,0,0.05)' : 'rgba(154,103,0,0.05)') : 'transparent',
+                    }}
+                  >
+                    <div
+                      className="mt-0.5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center text-[7px] font-bold transition-all duration-300 shrink-0"
+                      style={{
+                        backgroundColor: obj.done ? 'var(--warning)' : 'transparent',
+                        borderColor: obj.done ? 'var(--warning)' : 'var(--border-primary)',
+                        color: obj.done ? 'var(--bg-primary)' : 'transparent',
+                      }}
+                    >
+                      {obj.done ? '✓' : ''}
+                    </div>
+                    <span
+                      className="text-[11px] leading-relaxed transition-all duration-300"
+                      style={{
+                        color: obj.done ? 'var(--text-tertiary)' : 'var(--text-secondary)',
+                        textDecoration: obj.done ? 'line-through' : 'none',
+                      }}
+                    >
+                      {obj.description}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Ready message when all objectives met */}
+        {allMet && (
+          <div className="px-4 pt-2 pb-0">
+            <div
+              className="text-[10px] font-mono flex items-center gap-1.5 rounded-lg p-2 animate-fade-in"
+              style={{
+                backgroundColor: isDark ? 'rgba(255,176,0,0.08)' : 'rgba(154,103,0,0.08)',
+                border: '1px solid var(--warning)',
+                color: 'var(--warning)',
+              }}
+            >
+              <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              All objectives complete! Submit the flag above.
+            </div>
+          </div>
+        )}
 
         {/* Hint toggle */}
         <div className="px-4 pt-3 pb-0 space-y-2">

@@ -60,7 +60,13 @@
       "challenge": {
         "brief": "Create a file called 'journal.txt' in your home directory with the following content using echo and redirection:\n\n```\nDay 1: Started bash bootcamp\nDay 2: Learned about files\nDay 3: Everything is awesome!\n```\n\nUse `cat` to verify. The flag is hidden in one of the lines — can you spot it?",
         "hint": "Use `echo` with `>` for the first line, then `>>` to append the rest.",
-        "flag": "flag{3ch0_3xp3rt}"
+        "flag": "flag{3ch0_3xp3rt}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/journal.txt", "description": "Create journal.txt" },
+          { "type": "file_contains", "path": "/home/user/journal.txt", "content": "Day 1", "description": "Write Day 1 entry" },
+          { "type": "file_contains", "path": "/home/user/journal.txt", "content": "Day 3: Everything is awesome!", "description": "Write all 3 journal entries including the flag line" },
+          { "type": "command_used", "command": "cat", "description": "Read journal.txt with cat" }
+        ]
       }
     },
     {
@@ -126,7 +132,16 @@
       "challenge": {
         "brief": "Someone scattered flag pieces across your home directory!\n\n1. Create a file called 'piece1.txt' with content 'flag{'\n2. Create 'piece2.txt' with content 'cp_4nd_'\n3. Create 'piece3.txt' with content 'mv_ftw}'\n4. Create a 'puzzle' directory\n5. Move all three pieces into 'puzzle'\n6. Use `cat` to read all three files in order to reveal the flag\n\nThe flag is the concatenation of all three pieces.",
         "hint": "Use `cat piece1.txt piece2.txt piece3.txt` to read them in order.",
-        "flag": "flag{cp_4nd_mv_ftw}"
+        "flag": "flag{cp_4nd_mv_ftw}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/piece1.txt", "description": "Create piece1.txt with 'flag{'" },
+          { "type": "file_exists", "path": "/home/user/piece2.txt", "description": "Create piece2.txt with 'cp_4nd_'" },
+          { "type": "file_exists", "path": "/home/user/piece3.txt", "description": "Create piece3.txt with 'mv_ftw}'" },
+          { "type": "dir_exists", "path": "/home/user/puzzle", "description": "Create puzzle/ directory" },
+          { "type": "file_exists", "path": "/home/user/puzzle/piece1.txt", "description": "Move piece1.txt into puzzle/" },
+          { "type": "file_exists", "path": "/home/user/puzzle/piece2.txt", "description": "Move piece2.txt into puzzle/" },
+          { "type": "file_exists", "path": "/home/user/puzzle/piece3.txt", "description": "Move piece3.txt into puzzle/" }
+        ]
       }
     },
     {
@@ -190,7 +205,14 @@
       "challenge": {
         "brief": "Your Downloads folder (mocked as /home/user/Downloads) is a mess! Clean it up:\n\n1. `cd` into the Downloads directory\n2. List its contents to see what's there\n3. Remove ALL files that contain 'junk' in their name\n4. Remove the 'old_project' directory recursively\n5. Create a 'keep_me.txt' file with the flag inside: `flag{rm_1s_f0r3v3r}`\n\nProve the directory is clean by listing it with `ls`.",
         "hint": "Use `rm` with the right filenames. Check each step with `ls`.",
-        "flag": "flag{rm_1s_f0r3v3r}"
+        "flag": "flag{rm_1s_f0r3v3r}",
+        "objectives": [
+          { "type": "cwd_is", "path": "/home/user/Downloads", "description": "Navigate to Downloads/" },
+          { "type": "file_not_exists", "path": "/home/user/Downloads/junk1.txt", "description": "Remove junk1.txt" },
+          { "type": "file_not_exists", "path": "/home/user/Downloads/junk2.txt", "description": "Remove junk2.txt" },
+          { "type": "dir_not_exists", "path": "/home/user/Downloads/old_project", "description": "Remove old_project directory recursively" },
+          { "type": "file_exists", "path": "/home/user/Downloads/keep_me.txt", "description": "Create keep_me.txt with the flag" }
+        ]
       }
     },
     {
@@ -255,7 +277,11 @@
       "challenge": {
         "brief": "A 100-line file called 'secret_log.txt' exists in your home directory. The flag is hidden on the 42nd line.\n\nUse `head` and `tail` together (with pipes or redirection) to read only line 42.\n\nHint: `head -n 42 file.txt | tail -n 1`",
         "hint": "Chain head and tail with a pipe (|): `head -n 42 secret_log.txt | tail -n 1`",
-        "flag": "flag{h34d_t41l_ch41n}"
+        "flag": "flag{h34d_t41l_ch41n}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/secret_log.txt", "description": "Locate secret_log.txt" },
+          { "type": "command_used", "command": "head", "description": "Use head (and optionally tail) to read line 42" }
+        ]
       }
     },
     {
@@ -315,7 +341,14 @@
       "challenge": {
         "brief": "A program needs a config file called 'app.config' with exactly this content:\n\n```\n# App Configuration\nNAME=MyApp\nVERSION=2.0\nENABLED=true\nRETRIES=3\n# End of config\n```\n\nBuild it line by line using echo and redirection. Lines starting with # are comments.\n\nOnce created, verify with `cat app.config`.",
         "hint": "Use `echo \"# App Configuration\" > app.config` for the first line, then `>>` for each subsequent line.",
-        "flag": "flag{t3xt_cr4ft3r}"
+        "flag": "flag{t3xt_cr4ft3r}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/app.config", "description": "Create app.config" },
+          { "type": "file_contains", "path": "/home/user/app.config", "content": "# App Configuration", "description": "Write the config header" },
+          { "type": "file_contains", "path": "/home/user/app.config", "content": "NAME=MyApp", "description": "Add NAME=MyApp" },
+          { "type": "file_contains", "path": "/home/user/app.config", "content": "RETRIES=3", "description": "Add all config lines" },
+          { "type": "command_used", "command": "cat", "description": "Verify with cat" }
+        ]
       }
     },
     {
@@ -388,7 +421,17 @@
       "challenge": {
         "brief": "The Downloads folder is a mess! Clean it up:\n\n1. Create these directories: 'images', 'documents', 'videos'\n2. Move all .jpg files to 'images'\n3. Move all .pdf files to 'documents'\n4. Move all .mp4 files to 'videos'\n5. Delete any leftover .tmp files\n\nUse `ls` to see what's in Downloads first. Files are named like: photo.jpg, report.pdf, video.mp4, temp.tmp, etc.\n\nAfter organizing, list the final structure with `ls -R Downloads`.",
         "hint": "Create the dirs, then `mv Downloads/*.jpg Downloads/images/` etc. Then `rm Downloads/*.tmp`.",
-        "flag": "flag{0rg4n1z3d_4nd_cl34n}"
+        "flag": "flag{0rg4n1z3d_4nd_cl34n}",
+        "objectives": [
+          { "type": "dir_exists", "path": "/home/user/Downloads", "description": "Navigate to Downloads/" },
+          { "type": "dir_exists", "path": "/home/user/Downloads/images", "description": "Create images/ directory" },
+          { "type": "dir_exists", "path": "/home/user/Downloads/documents", "description": "Create documents/ directory" },
+          { "type": "dir_exists", "path": "/home/user/Downloads/videos", "description": "Create videos/ directory" },
+          { "type": "file_exists", "path": "/home/user/Downloads/images/photo.jpg", "description": "Move .jpg files to images/" },
+          { "type": "file_exists", "path": "/home/user/Downloads/documents/report.pdf", "description": "Move .pdf files to documents/" },
+          { "type": "file_exists", "path": "/home/user/Downloads/videos/video.mp4", "description": "Move .mp4 files to videos/" },
+          { "type": "file_not_exists", "path": "/home/user/Downloads/temp.tmp", "description": "Delete leftover .tmp files" }
+        ]
       }
     }
   ]

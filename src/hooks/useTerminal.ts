@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useGameStore } from '../store/gameStore'
-import { TerminalLine, ObjectiveData } from '../types'
+import { ObjectiveData } from '../types'
 import { checkObjective } from '../utils/objectiveCheckers'
 
 export function useTerminal() {
@@ -59,6 +59,22 @@ export function useTerminal() {
     }
   }, [])
 
+  const challengeObjectives = useGameStore(s => s.getChallengeObjectives)
+  const env = useGameStore(s => s.env)
+  const usedCommands = useGameStore(s => s.usedCommands)
+  const phase = useGameStore(s => s.phase)
+
+  const challengeObjectiveStatuses = useMemo(() => {
+    if (phase !== 'challenge') return []
+    return challengeObjectives().map(obj => ({
+      description: obj.description,
+      done: checkObjective(obj as ObjectiveData, env, usedCommands),
+    }))
+  }, [phase, challengeObjectives, env, usedCommands])
+
+  const allChallengeMet = challengeObjectiveStatuses.length > 0 &&
+    challengeObjectiveStatuses.every(o => o.done)
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleCommand(input)
@@ -94,5 +110,7 @@ export function useTerminal() {
     historyIndex,
     commandHistory,
     fillCommand,
+    challengeObjectiveStatuses,
+    allChallengeMet,
   }
 }

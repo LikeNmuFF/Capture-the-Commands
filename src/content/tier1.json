@@ -71,7 +71,11 @@
       "challenge": {
         "brief": "Someone hid a flag somewhere in the /home/user directory. Use `ls`, `cd`, and `cat` to explore the file system and find it.\n\nThe flag format is flag{...}.\n\nHint: Check every directory, including hidden ones.",
         "hint": "Try `ls -a` in each directory. Look for files that seem out of place.",
-        "flag": "flag{n1c3_n4v1g4t10n}"
+        "flag": "flag{n1c3_n4v1g4t10n}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/Documents/.secret", "description": "Find the hidden .secret file" },
+          { "type": "command_used", "command": "cat", "description": "Read the .secret file with cat" }
+        ]
       }
     },
     {
@@ -136,7 +140,17 @@
       "challenge": {
         "brief": "Create the following directory structure in your home folder:\n\n```\nproject/\n  src/\n    main.sh\n  docs/\n    readme.md\n  tests/\n    test1.sh\n```\n\nUse `mkdir` and `touch` to build it. Then navigate to `project/src/` and confirm with `pwd`.",
         "hint": "Create 'project' first, then its subdirectories, then the files inside them.",
-        "flag": "flag{m4k3r_0f_th1ngs}"
+        "flag": "flag{m4k3r_0f_th1ngs}",
+        "objectives": [
+          { "type": "dir_exists", "path": "/home/user/project", "description": "Create project/ directory" },
+          { "type": "dir_exists", "path": "/home/user/project/src", "description": "Create project/src/ directory" },
+          { "type": "dir_exists", "path": "/home/user/project/docs", "description": "Create project/docs/ directory" },
+          { "type": "dir_exists", "path": "/home/user/project/tests", "description": "Create project/tests/ directory" },
+          { "type": "file_exists", "path": "/home/user/project/src/main.sh", "description": "Create project/src/main.sh" },
+          { "type": "file_exists", "path": "/home/user/project/docs/readme.md", "description": "Create project/docs/readme.md" },
+          { "type": "file_exists", "path": "/home/user/project/tests/test1.sh", "description": "Create project/tests/test1.sh" },
+          { "type": "cwd_is", "path": "/home/user/project/src", "description": "Navigate to project/src/" }
+        ]
       }
     },
     {
@@ -195,7 +209,12 @@
       "challenge": {
         "brief": "In your home directory, there's a file called 'mystery.txt'. Create it first using `touch`, then write the following three lines into it using echo and redirection:\n\n```\nThe first secret is hidden\nBeneath the second layer\nThe flag is: flag{c4t_1s_4m4z1ng}\n```\n\nUse `cat` to read it and find the flag.",
         "hint": "Use `echo` with `>` to write each line, or `>>` to append. Then `cat` to read it.",
-        "flag": "flag{c4t_1s_4m4z1ng}"
+        "flag": "flag{c4t_1s_4m4z1ng}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/mystery.txt", "description": "Create mystery.txt" },
+          { "type": "file_contains", "path": "/home/user/mystery.txt", "content": "flag{c4t_1s_4m4z1ng}", "description": "Write the flag line into mystery.txt" },
+          { "type": "command_used", "command": "cat", "description": "Read mystery.txt with cat" }
+        ]
       }
     },
     {
@@ -266,7 +285,12 @@
       "challenge": {
         "brief": "A hidden file exists somewhere in a maze of directories under /home/user. You start at the root ('/').\n\nUse `cd`, `ls`, and `pwd` to find your way through this maze and locate the flag.\n\nThe directory tree is:\n```\n/maze/\n  room1/\n    room2/\n      room3/\n        .flag\n```\n\nNavigate to /maze/room1/room2/room3/ and use `ls -a` to see the hidden file, then `cat` it.",
         "hint": "Use `cd /maze/room1/room2/room3`, then `ls -a` to find the hidden .flag file, then `cat .flag`.",
-        "flag": "flag{p4th_tr4v3rs3r}"
+        "flag": "flag{p4th_tr4v3rs3r}",
+        "objectives": [
+          { "type": "cwd_is", "path": "/maze/room1/room2/room3", "description": "Navigate to /maze/room1/room2/room3" },
+          { "type": "command_used", "command": "ls", "description": "List files with ls -a to see hidden .flag" },
+          { "type": "command_used", "command": "cat", "description": "Read .flag with cat" }
+        ]
       }
     },
     {
@@ -330,7 +354,12 @@
       "challenge": {
         "brief": "Someone left a flag somewhere in a file under /home/user. The flag is split across two files!\n\nFile A contains the first half: 'flag{'. File B contains the second half: 'f1l3_d3t3ct1v3}'.\n\nYour mission:\n1. Find which two files contain the flag parts\n2. Use `cat` to read them both in order to reveal the full flag\n\nHint: Look in every directory with `ls -R`. The files might be hidden or in subdirectories.",
         "hint": "Use `ls -laR` to see everything recursively. Look for small files with unusual names. Then `cat fileA fileB` to combine them.",
-        "flag": "flag{f1l3_d3t3ct1v3}"
+        "flag": "flag{f1l3_d3t3ct1v3}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/Documents/part_a.txt", "description": "Find part_a.txt in Documents" },
+          { "type": "file_exists", "path": "/home/user/Documents/part_b.txt", "description": "Find part_b.txt in Documents" },
+          { "type": "command_used", "command": "cat", "description": "Read both parts with cat to reveal the flag" }
+        ]
       }
     }
   ]

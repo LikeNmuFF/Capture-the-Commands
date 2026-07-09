@@ -50,6 +50,7 @@ export interface GameActions {
   clearTierComplete: () => void
   getCurrentUnit: () => Unit | undefined
   getCurrentObjectives: () => ObjectiveData[]
+  getChallengeObjectives: () => ObjectiveData[]
   getCurrentStepDescription: () => string
   getCurrentStepHint: () => string
   setUserId: (uid: string | null) => void
@@ -284,6 +285,13 @@ export const useGameStore = create<GameState & GameActions>()(
         if (!unit) return ''
         const step = unit.missionSteps[state.currentStepIndex]
         return step?.hint || ''
+      },
+
+      getChallengeObjectives: () => {
+        const state = get()
+        const unit = getUnit(state.currentTierId, state.currentUnitIndex)
+        if (!unit || !unit.challenge.objectives) return []
+        return unit.challenge.objectives
       },
 
       executeCommand: (input: string) => {

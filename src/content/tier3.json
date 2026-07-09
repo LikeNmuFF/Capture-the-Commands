@@ -64,7 +64,11 @@
       "challenge": {
         "brief": "A file called 'access.log' has been created with 50 log entries. Somewhere in that file, a line contains the word 'FLAG' followed by the flag.\n\nUse `grep` to find it.\n\nHint: The flag is on a line that contains 'FLAG' — case might be tricky.",
         "hint": "Try `grep -i flag access.log` to search case-insensitively.",
-        "flag": "flag{gr3p_1s_y0ur_fr13nd}"
+        "flag": "flag{gr3p_1s_y0ur_fr13nd}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/access.log", "description": "Locate access.log" },
+          { "type": "command_used", "command": "grep", "description": "Use grep to search for the flag in access.log" }
+        ]
       }
     },
     {
@@ -134,7 +138,11 @@
       "challenge": {
         "brief": "A flag file named 'flag.txt' is hidden somewhere deep under /home/user in a directory structure.\n\nUse `find` to locate it, then use `cat` to read it.\n\nThe directory has thousands of empty files to slow you down — don't search manually!",
         "hint": "`find /home/user -name flag.txt` will find it instantly.",
-        "flag": "flag{f1nd_4nd_y3_sh4ll_r3c31v3}"
+        "flag": "flag{f1nd_4nd_y3_sh4ll_r3c31v3}",
+        "objectives": [
+          { "type": "command_used", "command": "find", "description": "Use find to locate flag.txt" },
+          { "type": "command_used", "command": "cat", "description": "Read flag.txt with cat" }
+        ]
       }
     },
     {
@@ -204,7 +212,11 @@
       "challenge": {
         "brief": "There's a file called 'data.txt' in your home directory. It contains the flag, but it's buried among thousands of numbers.\n\nUse `wc` to figure out how many lines the file has, then use `grep` or `tail` to extract the line that doesn't look like a number.\n\nThe flag line contains the word 'flag'.",
         "hint": "Find the total line count with `wc -l data.txt`. Then use `grep flag data.txt` to find the flag line directly.",
-        "flag": "flag{c0unt_0n_y0urs3lf}"
+        "flag": "flag{c0unt_0n_y0urs3lf}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/data.txt", "description": "Locate data.txt" },
+          { "type": "command_used", "command": "grep", "description": "Search for the flag in data.txt" }
+        ]
       }
     },
     {
@@ -274,7 +286,11 @@
       "challenge": {
         "brief": "A file called 'survey.txt' contains survey responses — one response per line, with many duplicates.\n\nFind the flag by:\n1. Sorting the file\n2. Finding the unique lines (duplicates removed)\n3. One of the unique lines contains the flag\n\nUse: `sort survey.txt | uniq` to see only unique responses.",
         "hint": "Pipe sort into uniq to clean up the data, then look for the line that stands out.",
-        "flag": "flag{s0rt3d_uniq_f1lt3r}"
+        "flag": "flag{s0rt3d_uniq_f1lt3r}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/survey.txt", "description": "Locate survey.txt" },
+          { "type": "command_used", "command": "sort", "description": "Use sort (and uniq) to find the unique flag line" }
+        ]
       }
     },
     {
@@ -344,7 +360,11 @@
       "challenge": {
         "brief": "A file called 'puzzle.log' has been created. It contains 100 lines of random data. Somewhere in it, a flag is hidden on a line that:\n- Contains the word 'secret'\n- Is not a duplicate (appears only once)\n\nFind it using pipes! The full solution is:\n```\ngrep secret puzzle.log | sort | uniq -c | sort -r | head -n 1\n```\n\nOr simply: `grep secret puzzle.log | uniq`",
         "hint": "Use `grep secret puzzle.log` to find the secret lines, then pipe to `uniq` to remove duplicates.",
-        "flag": "flag{p1p3s_m4k3_p0w3r}"
+        "flag": "flag{p1p3s_m4k3_p0w3r}",
+        "objectives": [
+          { "type": "file_exists", "path": "/home/user/puzzle.log", "description": "Locate puzzle.log" },
+          { "type": "command_used", "command": "grep", "description": "Search puzzle.log for the secret flag line" }
+        ]
       }
     }
   ]
