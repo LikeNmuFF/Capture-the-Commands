@@ -284,8 +284,9 @@ export default function AppShell({ terminal, quizPanel }: Props) {
 
       {/* Main area */}
       <div
-        className="flex-1 flex flex-col min-h-0 transition-all duration-300"
-        style={{ marginLeft: sidebarExpanded ? 280 : 48 }}
+        className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${
+          sidebarExpanded ? 'lg:ml-[280px]' : 'lg:ml-[48px]'
+        }`}
       >
         {/* Window title bar */}
         <div
