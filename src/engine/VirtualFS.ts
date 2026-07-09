@@ -131,7 +131,6 @@ export function mkdir(root: FileNode, absPath: string): boolean {
 export function touch(root: FileNode, absPath: string): boolean {
   const existing = getNode(root, absPath)
   if (existing) {
-    existing.content = ''
     return true
   }
   const parentPath = getParentPath(absPath)
