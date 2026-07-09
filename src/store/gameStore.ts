@@ -259,7 +259,12 @@ export const useGameStore = create<GameState & GameActions>()(
       },
 
       hydrateState: (partial) => {
-        set({ ...partial, terminalHistory: [], env: createInitialEnv(), usedCommands: [], xpToasts: [], quizScore: null, unitJustCompleted: false, tierJustCompleted: null })
+        const newEnv = createInitialEnv()
+        if (partial.phase === 'challenge') {
+          const unit = getUnit(partial.currentTierId!, partial.currentUnitIndex!)
+          if (unit) setupUnitFS(newEnv, unit.id)
+        }
+        set({ ...partial, terminalHistory: [], env: newEnv, usedCommands: [], xpToasts: [], quizScore: null, unitJustCompleted: false, tierJustCompleted: null })
       },
 
       clearToasts: () => set({ xpToasts: [] }),
@@ -344,13 +349,15 @@ export const useGameStore = create<GameState & GameActions>()(
         const unit = getUnit(state.currentTierId, state.currentUnitIndex)
         if (!unit) return
 
-        setupUnitFS(state.env, unit.id)
+        const newEnv = createInitialEnv()
+        setupUnitFS(newEnv, unit.id)
 
         const oldLevel = getLevel(state.xp)
         const newLevel = getLevel(state.xp + xpGained)
 
         set({
           phase: 'challenge',
+          env: newEnv,
           quizScore: correct,
           xp: state.xp + xpGained,
           terminalHistory: [
